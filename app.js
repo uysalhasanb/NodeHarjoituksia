@@ -8,6 +8,8 @@
 const express = require("express");
 // Use Express Handlebars as template engine 
 const {engine} = require("express-handlebars");
+const req = require("express/lib/request");
+const res = require("express/lib/response");
 
 // EXPRESS APPLICATION SETTINGS
 // ----------------------------
@@ -27,6 +29,10 @@ app.set("view engine", "handlebars");
 // URL ROUTES
 // ----------
 
+app.get("/", (req,res) => {
+    res.render("index")
+
+});
 
 //START THE LISTENER
 app.listen(PORT);
