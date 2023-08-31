@@ -17,13 +17,23 @@ h1 {font-size: 48px;}
 }
 
 table {
-
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    border-spacing: 0;
+    border-collapse: separate;
+    overflow: hidden;
 }
+
+tr:nth-child(even){background-color: #959595;}
 
 th {
-
+    padding: 10px;
+    color: #1b1b1b;
+    background-color: rgba(229, 255, 0, 0.501);    
 }
 
-td {
-    
+td {    
+    padding: 8px;
 }
+
+
