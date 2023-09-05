@@ -47,4 +47,8 @@ td {
     color: white;
 }
 
-  
+.digitalClock{
+    font-size: xx-large;
+    font-family: "Seven Segment";
+    color: rgb(8, 174, 19);
+}
