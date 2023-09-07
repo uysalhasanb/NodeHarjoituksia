@@ -47,8 +47,9 @@ td {
     color: white;
 }
 
-.digitalClock{
+/* Pages that show a digital clock uses this class definition*/
+.digitalClock {
     font-size: xx-large;
-    font-family: "Seven Segment";
-    color: rgb(8, 174, 19);
-}
+    font-family: 'Seven Segment';
+    color: green;
+}  
