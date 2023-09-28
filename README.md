@@ -1,7 +1,7 @@
 # NodeHarjoituksia
 Web-palvelinten toimintaan liittyviä esimerkkejä toteutettuna Node.js kirjastoon avulla
 
-## Tietoka8nta ja näkymät
+## Tietokanta ja näkymät
 
 Luodaan näkymä, joka laskee edellisen kuukauden hinnan keskiarvon, normaalihinnan ala ja ylärajat keskihajonnan perusteella. Jaetaan vaatimukset tehtäviksi tyyliin:
 
