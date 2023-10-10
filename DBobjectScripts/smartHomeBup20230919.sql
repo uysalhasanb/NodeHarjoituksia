@@ -5,7 +5,7 @@
 -- Dumped from database version 15.4
 -- Dumped by pg_dump version 15.4
 
--- Started on 2023-09-19 16:01:03
+-- Started on 2023-10-05 15:49:47
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -45,7 +45,7 @@ COMMENT ON TABLE public.hourly_price IS 'Electricity prices by hour';
 
 
 --
--- TOC entry 220 (class 1259 OID 19520)
+-- TOC entry 221 (class 1259 OID 32796)
 -- Name: average_by_weekday_num; Type: VIEW; Schema: public; Owner: postgres
 --
 
@@ -61,7 +61,7 @@ ALTER TABLE public.average_by_weekday_num OWNER TO postgres;
 
 --
 -- TOC entry 3387 (class 0 OID 0)
--- Dependencies: 220
+-- Dependencies: 221
 -- Name: VIEW average_by_weekday_num; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -69,7 +69,7 @@ COMMENT ON VIEW public.average_by_weekday_num IS 'Calculates an average for each
 
 
 --
--- TOC entry 217 (class 1259 OID 19503)
+-- TOC entry 216 (class 1259 OID 32775)
 -- Name: average_by_year; Type: VIEW; Schema: public; Owner: postgres
 --
 
@@ -84,7 +84,7 @@ ALTER TABLE public.average_by_year OWNER TO postgres;
 
 --
 -- TOC entry 3388 (class 0 OID 0)
--- Dependencies: 217
+-- Dependencies: 216
 -- Name: VIEW average_by_year; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -92,11 +92,35 @@ COMMENT ON VIEW public.average_by_year IS 'Average electricity prices on yearly 
 
 
 --
--- TOC entry 218 (class 1259 OID 19511)
--- Name: average_by_year-month_day; Type: VIEW; Schema: public; Owner: postgres
+-- TOC entry 218 (class 1259 OID 32783)
+-- Name: average_by_year_and_month; Type: VIEW; Schema: public; Owner: postgres
 --
 
-CREATE VIEW public."average_by_year-month_day" AS
+CREATE VIEW public.average_by_year_and_month AS
+ SELECT EXTRACT(year FROM hourly_price.timeslot) AS vuosi,
+    EXTRACT(month FROM hourly_price.timeslot) AS kuukausi,
+    avg(hourly_price.price) AS keskihinta
+   FROM public.hourly_price
+  GROUP BY (EXTRACT(year FROM hourly_price.timeslot)), (EXTRACT(month FROM hourly_price.timeslot));
+
+
+ALTER TABLE public.average_by_year_and_month OWNER TO postgres;
+
+--
+-- TOC entry 3389 (class 0 OID 0)
+-- Dependencies: 218
+-- Name: VIEW average_by_year_and_month; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON VIEW public.average_by_year_and_month IS 'Calculates average electricity prices for year-month basis';
+
+
+--
+-- TOC entry 219 (class 1259 OID 32787)
+-- Name: average_by_year_month_day; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW public.average_by_year_month_day AS
  SELECT EXTRACT(year FROM hourly_price.timeslot) AS vuosi,
     EXTRACT(month FROM hourly_price.timeslot) AS kuukausi,
     EXTRACT(day FROM hourly_price.timeslot) AS "päivä",
@@ -105,46 +129,19 @@ CREATE VIEW public."average_by_year-month_day" AS
   GROUP BY (EXTRACT(year FROM hourly_price.timeslot)), (EXTRACT(month FROM hourly_price.timeslot)), (EXTRACT(day FROM hourly_price.timeslot));
 
 
-ALTER TABLE public."average_by_year-month_day" OWNER TO postgres;
-
---
--- TOC entry 3389 (class 0 OID 0)
--- Dependencies: 218
--- Name: VIEW "average_by_year-month_day"; Type: COMMENT; Schema: public; Owner: postgres
---
-
-COMMENT ON VIEW public."average_by_year-month_day" IS 'Calculates averages to day level';
-
-
---
--- TOC entry 223 (class 1259 OID 19536)
--- Name: average_by_year_and_month; Type: VIEW; Schema: public; Owner: postgres
---
-
-CREATE VIEW public.average_by_year_and_month AS
- SELECT EXTRACT(year FROM hourly_price.timeslot) AS vuosi,
-    EXTRACT(month FROM hourly_price.timeslot) AS kuukausi,
-    avg(hourly_price.price) AS keskihinta,
-    stddev_pop(hourly_price.price) AS hajonta,
-    (avg(hourly_price.price) + stddev_pop(hourly_price.price)) AS "yläraja",
-    (avg(hourly_price.price) - stddev_pop(hourly_price.price)) AS alaraja
-   FROM public.hourly_price
-  GROUP BY (EXTRACT(year FROM hourly_price.timeslot)), (EXTRACT(month FROM hourly_price.timeslot));
-
-
-ALTER TABLE public.average_by_year_and_month OWNER TO postgres;
+ALTER TABLE public.average_by_year_month_day OWNER TO postgres;
 
 --
 -- TOC entry 3390 (class 0 OID 0)
--- Dependencies: 223
--- Name: VIEW average_by_year_and_month; Type: COMMENT; Schema: public; Owner: postgres
+-- Dependencies: 219
+-- Name: VIEW average_by_year_month_day; Type: COMMENT; Schema: public; Owner: postgres
 --
 
-COMMENT ON VIEW public.average_by_year_and_month IS 'Calculates average electricity prices for year-month basis';
+COMMENT ON VIEW public.average_by_year_month_day IS 'Calculates averages to day level';
 
 
 --
--- TOC entry 219 (class 1259 OID 19515)
+-- TOC entry 220 (class 1259 OID 32791)
 -- Name: weekday_lookup; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -162,7 +159,7 @@ ALTER TABLE public.weekday_lookup OWNER TO postgres;
 
 --
 -- TOC entry 3391 (class 0 OID 0)
--- Dependencies: 219
+-- Dependencies: 220
 -- Name: TABLE weekday_lookup; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -170,7 +167,7 @@ COMMENT ON TABLE public.weekday_lookup IS 'Allows weekday lookup with several la
 
 
 --
--- TOC entry 221 (class 1259 OID 19528)
+-- TOC entry 222 (class 1259 OID 32804)
 -- Name: avg_price_by_weekday_name; Type: VIEW; Schema: public; Owner: postgres
 --
 
@@ -190,7 +187,7 @@ CREATE VIEW public.avg_price_by_weekday_name AS
 ALTER TABLE public.avg_price_by_weekday_name OWNER TO postgres;
 
 --
--- TOC entry 215 (class 1259 OID 19495)
+-- TOC entry 215 (class 1259 OID 32771)
 -- Name: current_prices; Type: VIEW; Schema: public; Owner: postgres
 --
 
@@ -214,7 +211,7 @@ COMMENT ON VIEW public.current_prices IS 'Shows electricity prices from now on';
 
 
 --
--- TOC entry 224 (class 1259 OID 19540)
+-- TOC entry 224 (class 1259 OID 40967)
 -- Name: month_name_lookup; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -236,11 +233,11 @@ ALTER TABLE public.month_name_lookup OWNER TO postgres;
 -- Name: TABLE month_name_lookup; Type: COMMENT; Schema: public; Owner: postgres
 --
 
-COMMENT ON TABLE public.month_name_lookup IS 'Gives a mont name by number';
+COMMENT ON TABLE public.month_name_lookup IS 'Gives a month name by number';
 
 
 --
--- TOC entry 225 (class 1259 OID 19545)
+-- TOC entry 225 (class 1259 OID 40980)
 -- Name: monthly_averages_by_year_fin; Type: VIEW; Schema: public; Owner: postgres
 --
 
@@ -266,14 +263,12 @@ COMMENT ON VIEW public.monthly_averages_by_year_fin IS 'Monthly averages with Fi
 
 
 --
--- TOC entry 226 (class 1259 OID 19553)
+-- TOC entry 226 (class 1259 OID 122911)
 -- Name: previous_month_average; Type: VIEW; Schema: public; Owner: postgres
 --
 
 CREATE VIEW public.previous_month_average AS
- SELECT average_by_year_and_month.keskihinta,
-    average_by_year_and_month."yläraja",
-    average_by_year_and_month.alaraja
+ SELECT average_by_year_and_month.keskihinta
    FROM public.average_by_year_and_month
   WHERE ((average_by_year_and_month.vuosi = EXTRACT(year FROM now())) AND (average_by_year_and_month.kuukausi = (EXTRACT(month FROM now()) - (1)::numeric)));
 
@@ -281,46 +276,47 @@ CREATE VIEW public.previous_month_average AS
 ALTER TABLE public.previous_month_average OWNER TO postgres;
 
 --
--- TOC entry 216 (class 1259 OID 19499)
+-- TOC entry 217 (class 1259 OID 32779)
 -- Name: running_average; Type: VIEW; Schema: public; Owner: postgres
 --
 
 CREATE VIEW public.running_average AS
- SELECT round((avg(hourly_price.price))::numeric, 3) AS keskihinta
-   FROM public.hourly_price;
+ SELECT current_prices.kello,
+    current_prices.hinta
+   FROM public.current_prices;
 
 
 ALTER TABLE public.running_average OWNER TO postgres;
 
 --
 -- TOC entry 3395 (class 0 OID 0)
--- Dependencies: 216
+-- Dependencies: 217
 -- Name: VIEW running_average; Type: COMMENT; Schema: public; Owner: postgres
 --
 
-COMMENT ON VIEW public.running_average IS 'Calculates average electricity price from all rows';
+COMMENT ON VIEW public.running_average IS 'Show';
 
 
 --
--- TOC entry 222 (class 1259 OID 19532)
--- Name: running_average_stdev; Type: VIEW; Schema: public; Owner: postgres
+-- TOC entry 223 (class 1259 OID 40963)
+-- Name: running_average_stddev; Type: VIEW; Schema: public; Owner: postgres
 --
 
-CREATE VIEW public.running_average_stdev AS
+CREATE VIEW public.running_average_stddev AS
  SELECT avg(hourly_price.price) AS hinta,
     stddev(hourly_price.price) AS keskihajonta
    FROM public.hourly_price;
 
 
-ALTER TABLE public.running_average_stdev OWNER TO postgres;
+ALTER TABLE public.running_average_stddev OWNER TO postgres;
 
 --
 -- TOC entry 3396 (class 0 OID 0)
--- Dependencies: 222
--- Name: VIEW running_average_stdev; Type: COMMENT; Schema: public; Owner: postgres
+-- Dependencies: 223
+-- Name: VIEW running_average_stddev; Type: COMMENT; Schema: public; Owner: postgres
 --
 
-COMMENT ON VIEW public.running_average_stdev IS 'Calcultates average electricity price and standard deviation from whole price data';
+COMMENT ON VIEW public.running_average_stddev IS 'Calculates  average electricity price and standard deviation from whole price data';
 
 
 --
@@ -353,55 +349,55 @@ INSERT INTO public.hourly_price VALUES ('2023-03-23 22:00:00+02', 6.28);
 INSERT INTO public.hourly_price VALUES ('2023-03-23 23:00:00+02', 5.26);
 INSERT INTO public.hourly_price VALUES ('2023-03-24 00:00:00+02', 4.94);
 INSERT INTO public.hourly_price VALUES ('2023-03-24 01:00:00+02', 4.6);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 02:00:00+02', 4.09);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 03:00:00+02', 3.66);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 04:00:00+02', 3.35);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 05:00:00+02', 3.33);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 06:00:00+02', 3.41);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 07:00:00+02', 3.73);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 08:00:00+02', 4.31);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 09:00:00+02', 4.93);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 10:00:00+02', 6.44);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 11:00:00+02', 8.37);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 12:00:00+02', 6.47);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 13:00:00+02', 4.4);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 14:00:00+02', 3.76);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 15:00:00+02', 4.01);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 16:00:00+02', 3.27);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 17:00:00+02', 3.38);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 18:00:00+02', 3.3);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 19:00:00+02', 4.22);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 20:00:00+02', 5.49);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 21:00:00+02', 5.56);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 22:00:00+02', 4.93);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 23:00:00+02', 4.39);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 00:00:00+02', 4.19);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 01:00:00+02', 3.72);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 02:00:00+02', 3.26);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 03:00:00+02', 2.6);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 04:00:00+02', 0.72);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 05:00:00+02', 0.33);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 06:00:00+02', 0.23);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 07:00:00+02', 0.2);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 08:00:00+02', 0.32);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 09:00:00+02', 0.51);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 10:00:00+02', 2.53);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 11:00:00+02', 2.79);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 12:00:00+02', 3.14);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 13:00:00+02', 3.13);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 14:00:00+02', 3.1);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 15:00:00+02', 3.08);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 16:00:00+02', 3.1);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 17:00:00+02', 3.25);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 18:00:00+02', 3.98);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 19:00:00+02', 4.47);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 20:00:00+02', 4.79);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 21:00:00+02', 6.6);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 22:00:00+02', 7.05);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 23:00:00+02', 6.31);
-INSERT INTO public.hourly_price VALUES ('2023-03-26 00:00:00+02', 4.6);
-INSERT INTO public.hourly_price VALUES ('2023-03-26 01:00:00+02', 4.28);
-INSERT INTO public.hourly_price VALUES ('2023-03-26 02:00:00+02', 3.67);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 03:00:00+03', 4.09);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 04:00:00+03', 3.66);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 05:00:00+03', 3.35);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 06:00:00+03', 3.33);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 07:00:00+03', 3.41);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 08:00:00+03', 3.73);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 09:00:00+03', 4.31);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 10:00:00+03', 4.93);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 11:00:00+03', 6.44);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 12:00:00+03', 8.37);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 13:00:00+03', 6.47);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 14:00:00+03', 4.4);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 15:00:00+03', 3.76);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 16:00:00+03', 4.01);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 17:00:00+03', 3.27);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 18:00:00+03', 3.38);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 19:00:00+03', 3.3);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 20:00:00+03', 4.22);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 21:00:00+03', 5.49);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 22:00:00+03', 5.56);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 23:00:00+03', 4.93);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 00:00:00+03', 4.39);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 01:00:00+03', 4.19);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 02:00:00+03', 3.72);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 03:00:00+03', 3.26);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 04:00:00+03', 2.6);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 05:00:00+03', 0.72);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 06:00:00+03', 0.33);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 07:00:00+03', 0.23);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 08:00:00+03', 0.2);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 09:00:00+03', 0.32);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 10:00:00+03', 0.51);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 11:00:00+03', 2.53);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 12:00:00+03', 2.79);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 13:00:00+03', 3.14);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 14:00:00+03', 3.13);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 15:00:00+03', 3.1);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 16:00:00+03', 3.08);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 17:00:00+03', 3.1);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 18:00:00+03', 3.25);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 19:00:00+03', 3.98);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 20:00:00+03', 4.47);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 21:00:00+03', 4.79);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 22:00:00+03', 6.6);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 23:00:00+03', 7.05);
+INSERT INTO public.hourly_price VALUES ('2023-03-26 00:00:00+03', 6.31);
+INSERT INTO public.hourly_price VALUES ('2023-03-26 01:00:00+03', 4.6);
+INSERT INTO public.hourly_price VALUES ('2023-03-26 02:00:00+03', 4.28);
+INSERT INTO public.hourly_price VALUES ('2023-03-26 03:00:00+03', 3.67);
 INSERT INTO public.hourly_price VALUES ('2023-03-26 04:00:00+03', 4.36);
 INSERT INTO public.hourly_price VALUES ('2023-03-26 05:00:00+03', 4.32);
 INSERT INTO public.hourly_price VALUES ('2023-03-26 06:00:00+03', 4.41);
@@ -4676,38 +4672,38 @@ INSERT INTO public.hourly_price VALUES ('2023-09-20 02:00:00+03', -0.05);
 
 
 --
--- TOC entry 3380 (class 0 OID 19540)
+-- TOC entry 3380 (class 0 OID 40967)
 -- Dependencies: 224
 -- Data for Name: month_name_lookup; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.month_name_lookup VALUES (1, 'tammikuu', 'januari', 'January', 'Januar', 'Ocak');
-INSERT INTO public.month_name_lookup VALUES (2, 'helmikuu', 'februari', 'February', 'Februar', 'Şubat');
-INSERT INTO public.month_name_lookup VALUES (3, 'maaliskuu', 'mars', 'March', 'März', 'Mart');
-INSERT INTO public.month_name_lookup VALUES (4, 'huhtikuu', 'april', 'April', 'April', 'Nisan');
-INSERT INTO public.month_name_lookup VALUES (5, 'toukokuu', 'maj', 'May', 'Mai', 'Mayis');
-INSERT INTO public.month_name_lookup VALUES (6, 'kesäkuu', 'juni', 'June', 'Juni', 'Haziran');
-INSERT INTO public.month_name_lookup VALUES (7, 'heinäkuu', 'juli', 'July', 'Juli', 'Temmuz');
-INSERT INTO public.month_name_lookup VALUES (8, 'elokuu', 'augusti', 'August', 'August', 'Ağustos');
-INSERT INTO public.month_name_lookup VALUES (9, 'syyskuu', 'september', 'September', 'September', 'Eylül');
-INSERT INTO public.month_name_lookup VALUES (10, 'lokakuu', 'oktober', 'October', 'Oktober', 'Ekim');
-INSERT INTO public.month_name_lookup VALUES (11, 'marraskuu', 'november', 'November', 'November', 'Kasım');
-INSERT INTO public.month_name_lookup VALUES (12, 'joulukuu', 'december', 'December', 'Dezember', 'Aralık');
+INSERT INTO public.month_name_lookup VALUES (1, 'tammikuu', 'januari', 'January', 'januar', 'ocak');
+INSERT INTO public.month_name_lookup VALUES (2, 'helmikuu', 'februari', 'February', 'februar', 'şubat');
+INSERT INTO public.month_name_lookup VALUES (3, 'maaliskuu', 'mars', 'March', 'märz', 'mart');
+INSERT INTO public.month_name_lookup VALUES (4, 'huhtikuu', 'april', 'April', 'april', 'nisan');
+INSERT INTO public.month_name_lookup VALUES (5, 'toukokuu', 'maj', 'May', 'mai', 'mayis');
+INSERT INTO public.month_name_lookup VALUES (6, 'kesäkuu', 'juni', 'June', 'juni', 'haziran');
+INSERT INTO public.month_name_lookup VALUES (7, 'heinäkuu', 'juli', 'July', 'juli', 'temmuz');
+INSERT INTO public.month_name_lookup VALUES (8, 'elokuu', 'augusti', 'August', 'august', 'ağustos');
+INSERT INTO public.month_name_lookup VALUES (9, 'syyskuu', 'september', 'September', 'september', 'eylül');
+INSERT INTO public.month_name_lookup VALUES (10, 'lokakuu', 'oktober', 'October', 'oktober', 'ekim');
+INSERT INTO public.month_name_lookup VALUES (11, 'marraskuu', 'november', 'November', 'november', 'kasım');
+INSERT INTO public.month_name_lookup VALUES (12, 'joulukuu', 'december', 'December', 'dezemer', 'aralık');
 
 
 --
--- TOC entry 3379 (class 0 OID 19515)
--- Dependencies: 219
+-- TOC entry 3379 (class 0 OID 32791)
+-- Dependencies: 220
 -- Data for Name: weekday_lookup; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.weekday_lookup VALUES (1, 'maanantai', 'måndag', 'monday', 'Montag', 'Pazartesi');
-INSERT INTO public.weekday_lookup VALUES (2, 'tiistai', 'tisdag', 'tuesday', 'Dienstag', 'Sali');
-INSERT INTO public.weekday_lookup VALUES (3, 'keskiviikko', 'onsdag', 'wednesday', 'Mittwoch', 'Carsamba');
-INSERT INTO public.weekday_lookup VALUES (4, 'torstai', 'torsdag', 'thursday', 'Donnerstag', 'Persemble');
-INSERT INTO public.weekday_lookup VALUES (5, 'perjantai', 'fredag', 'friday', 'Freitag', 'Cuma');
-INSERT INTO public.weekday_lookup VALUES (6, 'lauantai', 'lördag', 'saturday', 'Samstag', 'Cumartesi');
-INSERT INTO public.weekday_lookup VALUES (7, 'sunnuntai', 'söndag', 'sunday', 'Sonntag', 'Pazar');
+INSERT INTO public.weekday_lookup VALUES (1, 'maanantai', 'måndag', 'monday', 'montag', 'pazartesi');
+INSERT INTO public.weekday_lookup VALUES (2, 'tiistai', 'tistag', 'tuesday', 'dienstag', 'sali');
+INSERT INTO public.weekday_lookup VALUES (3, 'keskiviikko', 'onsdag', 'wednesday', 'mittwoch', 'carsamba');
+INSERT INTO public.weekday_lookup VALUES (4, 'torstai', 'torsdag', 'thursday', 'donnerstag', 'persembe');
+INSERT INTO public.weekday_lookup VALUES (5, 'perjantai', 'fredag', 'friday', 'freitag', 'cuma');
+INSERT INTO public.weekday_lookup VALUES (6, 'lauantai', 'lördag', 'saturday', 'samstag', 'cumartesi');
+INSERT INTO public.weekday_lookup VALUES (7, 'sunnuntai', 'söndag', 'sunday', 'sonntag', 'pazar');
 
 
 --
@@ -4720,7 +4716,7 @@ ALTER TABLE ONLY public.hourly_price
 
 
 --
--- TOC entry 3225 (class 2606 OID 19544)
+-- TOC entry 3225 (class 2606 OID 40971)
 -- Name: month_name_lookup month_name_lookup_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4729,7 +4725,7 @@ ALTER TABLE ONLY public.month_name_lookup
 
 
 --
--- TOC entry 3223 (class 2606 OID 19519)
+-- TOC entry 3223 (class 2606 OID 32795)
 -- Name: weekday_lookup weekday_lookup_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4737,7 +4733,7 @@ ALTER TABLE ONLY public.weekday_lookup
     ADD CONSTRAINT weekday_lookup_pk PRIMARY KEY (weekday_number);
 
 
--- Completed on 2023-09-19 16:01:03
+-- Completed on 2023-10-05 15:49:48
 
 --
 -- PostgreSQL database dump complete
