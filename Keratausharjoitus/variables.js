@@ -31,7 +31,7 @@ const fullName = 'Jussi Jurkka'; // Määritellään ja annetaan arvo (pakollist
 // -------------------
 planet = 'earth'; // Aina globaali, sijainnista riippumatta
 var continent = 'Europe'; // Aina globaali, sijainnista riippumatta
-const country = 'Finnland'; // Globaali, koska ei ole minkään lohkon sisällä
+const country = 'Finland'; // Globaali, koska ei ole minkään lohkon sisällä
 let alliance = 'EU'; // Globaali, koska ei ole minkään lohkon sisällä
 
 function chairOfAlliance() {
@@ -41,8 +41,8 @@ function chairOfAlliance() {
 }
 
 chairOfAlliance(); // Kutsutaan funktiota, jossa country on Spain
-console.log('Global constant country is still', country); // Finnland
-console.log("Elon Musk want's to create a colony on", planet); // Mars
+console.log('Global constant country is still', country); // Finland
+console.log("Elon Musk wants to create a colony on", planet); // Mars
 
 // Muuttujan tietotyypin voi selvittää typeof-operaattorilla
 console.log('country is a', typeof country); // String
@@ -68,9 +68,29 @@ teachers.push('Mari') // Lisätään Mari
 console.log('There is now', teachers.length, 'teachers in the array') // 5
 console.log('And now we remove last element who was', teachers.pop()) // Mari
 console.log('There is now', teachers.length, 'teachers in the array') // 4
+console.log('Remove the first element who was', teachers.shift()) // Tuomas
+teachers.unshift('Sirkku') // Lisätään Sirkku vektorin ensimmäiseksi alkioksi
+console.log('Lista on nyt:', teachers)
 
 // Vektorin aakkostaminen
 console.log('Teachers in alphabetical order are:', teachers.sort())
+
+// Jono ja pino
+// ------------
+
+// Jono FiFo (First in, First out)
+const jono = [];
+let palvelusvuorossa = ''
+jono.push('eka'); // Ensimmäinen alkio
+jono.push('toka');
+palvelusvuorossa = jono.shift() // Ensimmäisenä jonoon tullut (eka)
+
+// Pino LiFo (Last in, First out)
+let pino = [];
+let kasittelyssa = ''
+pino.push('eka')
+pino.push('toka')
+kasittelyssa = pino.pop() // Viimeisenä pinoon lisätty (toka)
 
 // Moniulotteinen vektori / taulukko
 const priceTable = [
@@ -91,7 +111,7 @@ nerds.delete('Calle'); // Poistetaan Calle
 
 // Luodaan funktio, jolla käsitellään joukon jäsentä
 // Funktio tarvitsee kaksi argumenttia, indeksin ja joukon
-function callNames(index, set) {
+function callNames(index, set) { // set-argumentin voi jättää pois
   console.log('You bloody nerd', index); // Haukutaan yksittäistä alkiota
 }
 

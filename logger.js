@@ -1,17 +1,33 @@
+// A TOOL FOR ADDING MESSAGES TO A LOG FILE
+// ========================================
+
+// LIBRARIES
+// ----------
 const fs = require('fs');
 
-const timestamp = new Date();
-const isoTimeStamp = timestamp.toISOString();
-let operation = 'Data Fetch operation';
-let status = 'processed successfully';
-let entry = operation + ' ' +status + '@' + isoTimeStamp + '\n';
+// FUNCTION DEFINITONS
+// -------------------
 
-console.log(entry)
+// Function gets message entry and log file name as arguments
+const add2log = (entry, fileName) => {
 
-fs.appendFile('.dataOperations.log',entry,(err) => {
-    if (err){
-        console.log(err)
-    }
-})
+    // Create a ISO formatted timestamp using Date class
+    const isoTimeStamp = new Date().toISOString();
 
-//TODO: Create a function to do this ie.create log message and timestamp
+    // Construct a log entry with timestamp and a new line character
+    const logRow = entry + '@' + isoTimeStamp + '\n'
+
+    // Append entry to a log file or give an error
+    fs.appendFile(fileName, logRow, (err) => {
+        if (err) {
+            console.log(err);
+        }
+    })
+};
+
+// EXPORT
+// ------
+
+module.exports = {
+    add2log
+}
