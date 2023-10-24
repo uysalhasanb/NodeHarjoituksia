@@ -1,6 +1,9 @@
 // HARJOITUKSIA
 // ============
 
+// LIBRARIES
+// ---------
+const mathjs = require('mathjs')
 /* HARJOITUS 1 - YKSINKERTAISET TIETOTYYPIT
 Tallennamme tietoja henkilöstä. Mieti, mitkä tiedot ovat muuttuvia ja mitkä pysyviä ja 
 päätä sen perusteella, millä komennolla määrittelet muuttujan.
@@ -64,7 +67,7 @@ arrayOfCoders.push(coder2);
 const coder3 = new Programmer('Calle Keckelberg', 'C++', 'Full stack', 'SQLite')
 arrayOfCoders.push(coder3);
 
-console.log('Ja koodarit ovat', arrayOfCoders )
+console.log('Ja koodarit ovat', arrayOfCoders)
 
 /* HARJOITUS 5
 Muokkaa luokkaa siten, että oliolle voidaan antaa lista ammatillisten tutkinnonosien
@@ -88,22 +91,32 @@ class ProgrammerWithMethod {
         for (let index = 0; index < array.length; index++) {
             const element = array[index];
             sum = sum + element
-            
+
         }
 
         // Keskiarvo on lukujen summa jaettuna lukumäärällä
         avg = sum / array.length;
         return avg; // Palautetaan laskettu keskiarvo
-        } 
+    }
 }
 
 const coder4 = new ProgrammerWithMethod('Assi Kalma', 'C#', 'Backend', 'MS SQL')
-console.log('Assin keskiarvo on', coder4.calculateAverage([2,5,4,5]))
+console.log('Assin keskiarvo on', coder4.calculateAverage([2, 5, 4, 5]))
 
 /* Harjoitus 6 luo funktio, joka laskee vektorin alkioiden keskihajonnan perinteisellä tavalla
  Funktiolle annetaan argumenteiksi vektori ja haluttu desimaalien määrä*/
 
-/* Harjoitus 7 Muuta edellisen harjoituksen funktio ES6-muotoon
+function stdDeviation(array, decimals) {
+    const deviation = mathjs.std(array);
+    const roundedDev = mathjs.round(deviation, decimals);
+    return roundedDev;
+
+}
+
+console.log(stdDeviation([1, 3, 1, 3], 1))
+
+/* Harjoitus 7 Muuta edellisen harjoituksen funktio ES6-muotoon 
+eli määritys nuolifunktion avulla
 */
 
 const stdDev = (array, decimals) => {
@@ -112,91 +125,11 @@ const stdDev = (array, decimals) => {
     return roundedDev;
 }
 
-console.log(stdDev([1,3,1,3], 1))
+console.log(stdDev([1, 3, 1, 3], 1))
 
 /* Harjoitus 8 Määrittele luokka, jossa on metodit keskiarvon,
 keskihajonnan ja varianssin, suurimman ja pienimmän arvon laskemiseksi
 argumenttina annetusta vektorista. */
-
-/* Keskimäärin voi tarkoittaa montaa eri tavalla laskettua arvoa:
-1. Keskiarvo (average) on lukujen summa jaettuna niiden lukumäärällä
-2. Keskiluku (mean) luvut järjestetään suuruusjärjestykseen ja otetaan keskimäinen arvo. 
-Jos sitä ei ole, otetaan kahden keskimmäisen luvun keskiarvo
-3. Tyyppiarvo (mode) arvo, joka esiintyy useimmin listassa
-*/
-
-class ArrayStats {
-    constructor(array, decimals) {
-        this.array = array;
-        this.decimals = decimals;
-    }
-
-    average() {
-        let avg = 0; // Alustetaan keskiarvo 0:ksi
-        let sum = 0; // Alustetaan summa 0:ksi
-
-        // Käydään alkiot läpi silmukassa
-        for (let index = 0; index < this.array.length; index++) {
-            const element = this.array[index];
-            sum = sum + element
-            
-        }
-
-        // Keskiarvo on lukujen summa jaettuna lukumäärällä
-        avg = sum / this.array.length;
-        return avg; // Palautetaan laskettu keskiarvo
-        } 
-
-    
-    variance() {
-        const arrayVarianve = mathjs.variance(this.array);
-        const roundedArrayVariance = mathjs.round(arrayVarianve, this.decimals);
-        return roundedArrayVariance;
-
-    }
-    stdDev() {
-        const arrayDeviation = mathjs.std(this.array);
-        const roundeArrayDeviation = mathjs.round(arrayDeviation, this.decimals);
-        return roundeArrayDeviation;
-
-    }
-
-    max() {
-        const arrayMax= mathjs.max(this.array);
-        const roundeArrayMax = mathjs.round(arrayMax, this.decimals);
-        return roundeArrayMax;
-
-    }
-
-    min() {
-        const arrayMin= mathjs.min(this.array);
-        const roundeArrayMin = mathjs.round(arrayMin, this.decimals);
-        return roundeArrayMin;
-    }
-
-}
-
-const arrayStats = new ArrayStats([1,3,1,3], 1)
-console.log('Keskiarvo on', arrayStats.average())
-console.log('Varianssi on', arrayStats.variance())
-console.log('Keskihajonta on', arrayStats.stdDev())
-console.log('Minimi on', arrayStats.min())
-console.log('Maksimi on', arrayStats.max())
-
-/* HARJOITUS 9
-Tee edellisen tehtävän luokasta CJS kirjasto ja anna se muiden ohjelmien käyttöön export-komennolla
-*/
-// A CJS LIBRARY TO CALCULATE BASIC STATISTICAL CHARASTERISTICS OF AN ARRAY
-// ========================================================================
-
-// LIBRARIES
-// ---------
-
-// Statistical operations are based on math.js library
-// It is not built-in Math class, need to install this 1st
-const mathjs = require('mathjs'); 
-
-// A class to calculate statistical characteristics at given precision
 class ArrayStats {
     constructor(array, decimals) {
         this.array = array;
@@ -263,20 +196,62 @@ class ArrayStats {
 
 }
 
-module.exports = {
-    ArrayStats
-}
+const arrayStats = new ArrayStats([1, 3, 1, 3, 5], 1)
+console.log('Keskiarvo on', arrayStats.mean())
+console.log('Keskiluku', arrayStats.median())
+console.log('Populaation varianssi on', arrayStats.populationVariance())
+console.log('Populaation keskihajonta on', arrayStats.populationStdDev())
+console.log('Minimi on', arrayStats.min())
+console.log('Maksimi on', arrayStats.max())
 
-/*
-TESTATAAN, ETTÄ LUOKKA ON KÄYTETTÄVISSÄ TOISESSA MODUULISSA (suttu.js)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* HARJOITUS 9
+Tee edellisen tehtävän luokasta CJS kirjasto ja anna se muiden ohjelmien käyttöön export-komennolla
+Luo node.js-ohjelma, jossa luokasta luodaan 5 oliota ja tallennetaan ne vektoriin.
+
 */
-
-const stats = require('./statistics');
-
-const arrayStats = new stats.ArrayStats([1,2,3,44,44,22,22,22],1)
-let average = arrayStats.mean() // Average
-let median = arrayStats.median() // Number in the middle of the array
-let mode = arrayStats.mode() // The most common number in the array
-console.log('Ja vektorin alkioiden keskiarvo on', average)
-console.log('Ja vektorin alkioiden keskiluku on', median)
-console.log('Ja vektorin yleisin alkio on', mode)
