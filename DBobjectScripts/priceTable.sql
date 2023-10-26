@@ -5,6 +5,7 @@ CREATE TABLE public.price (
                 price REAL NOT NULL,
                 CONSTRAINT price_pk PRIMARY KEY (start, end_1)
 );
-COMMENT ON TABLE public.price IS 'Stores hourly electricity prices and timestamps ';
+COMMENT ON TABLE public.price IS 'Stores hourly electricity  prices and timestamps ';
 COMMENT ON COLUMN public.price.start IS 'Date and hour when time period starts';
 COMMENT ON COLUMN public.price.end_1 IS 'When time period ends';
+COMMENT ON COLUMN public.price.price IS 'Hourly price cents';

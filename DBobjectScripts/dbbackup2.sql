@@ -396,4 +396,3 @@ ALTER TABLE ONLY public.weekday_lookup
 --
 -- PostgreSQL database dump complete
 --
-

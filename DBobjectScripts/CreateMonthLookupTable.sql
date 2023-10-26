@@ -19,4 +19,4 @@ ALTER TABLE IF EXISTS public.month_name_lookup
     OWNER to postgres;
 
 COMMENT ON TABLE public.month_name_lookup
-    IS 'Gives a month name by number';
+    IS 'Gives a mont name by number';

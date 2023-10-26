@@ -5,7 +5,7 @@
 -- Dumped from database version 15.4
 -- Dumped by pg_dump version 15.4
 
--- Started on 2023-09-14 15:55:15
+-- Started on 2023-09-14 15:55:13
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -45,7 +45,7 @@ COMMENT ON TABLE public.hourly_price IS 'Electricity prices by hour';
 
 
 --
--- TOC entry 221 (class 1259 OID 32796)
+-- TOC entry 221 (class 1259 OID 19520)
 -- Name: average_by_weekday_num; Type: VIEW; Schema: public; Owner: postgres
 --
 
@@ -69,7 +69,7 @@ COMMENT ON VIEW public.average_by_weekday_num IS 'Calculates an average for each
 
 
 --
--- TOC entry 216 (class 1259 OID 32775)
+-- TOC entry 217 (class 1259 OID 19503)
 -- Name: average_by_year; Type: VIEW; Schema: public; Owner: postgres
 --
 
@@ -84,7 +84,7 @@ ALTER TABLE public.average_by_year OWNER TO postgres;
 
 --
 -- TOC entry 3366 (class 0 OID 0)
--- Dependencies: 216
+-- Dependencies: 217
 -- Name: VIEW average_by_year; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -92,7 +92,32 @@ COMMENT ON VIEW public.average_by_year IS 'Average electricity prices on yearly 
 
 
 --
--- TOC entry 218 (class 1259 OID 32783)
+-- TOC entry 219 (class 1259 OID 19511)
+-- Name: average_by_year-month_day; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW public."average_by_year-month_day" AS
+ SELECT EXTRACT(year FROM hourly_price.timeslot) AS vuosi,
+    EXTRACT(month FROM hourly_price.timeslot) AS kuukausi,
+    EXTRACT(day FROM hourly_price.timeslot) AS "päivä",
+    avg(hourly_price.price) AS keskihinta
+   FROM public.hourly_price
+  GROUP BY (EXTRACT(year FROM hourly_price.timeslot)), (EXTRACT(month FROM hourly_price.timeslot)), (EXTRACT(day FROM hourly_price.timeslot));
+
+
+ALTER TABLE public."average_by_year-month_day" OWNER TO postgres;
+
+--
+-- TOC entry 3367 (class 0 OID 0)
+-- Dependencies: 219
+-- Name: VIEW "average_by_year-month_day"; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON VIEW public."average_by_year-month_day" IS 'Calculates averages to day level';
+
+
+--
+-- TOC entry 218 (class 1259 OID 19507)
 -- Name: average_by_year_and_month; Type: VIEW; Schema: public; Owner: postgres
 --
 
@@ -107,7 +132,7 @@ CREATE VIEW public.average_by_year_and_month AS
 ALTER TABLE public.average_by_year_and_month OWNER TO postgres;
 
 --
--- TOC entry 3367 (class 0 OID 0)
+-- TOC entry 3368 (class 0 OID 0)
 -- Dependencies: 218
 -- Name: VIEW average_by_year_and_month; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -116,32 +141,7 @@ COMMENT ON VIEW public.average_by_year_and_month IS 'Calculates average electric
 
 
 --
--- TOC entry 219 (class 1259 OID 32787)
--- Name: average_by_year_month_day; Type: VIEW; Schema: public; Owner: postgres
---
-
-CREATE VIEW public.average_by_year_month_day AS
- SELECT EXTRACT(year FROM hourly_price.timeslot) AS vuosi,
-    EXTRACT(month FROM hourly_price.timeslot) AS kuukausi,
-    EXTRACT(day FROM hourly_price.timeslot) AS "päivä",
-    avg(hourly_price.price) AS keskihinta
-   FROM public.hourly_price
-  GROUP BY (EXTRACT(year FROM hourly_price.timeslot)), (EXTRACT(month FROM hourly_price.timeslot)), (EXTRACT(day FROM hourly_price.timeslot));
-
-
-ALTER TABLE public.average_by_year_month_day OWNER TO postgres;
-
---
--- TOC entry 3368 (class 0 OID 0)
--- Dependencies: 219
--- Name: VIEW average_by_year_month_day; Type: COMMENT; Schema: public; Owner: postgres
---
-
-COMMENT ON VIEW public.average_by_year_month_day IS 'Calculates averages to day level';
-
-
---
--- TOC entry 220 (class 1259 OID 32791)
+-- TOC entry 220 (class 1259 OID 19515)
 -- Name: weekday_lookup; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -167,7 +167,7 @@ COMMENT ON TABLE public.weekday_lookup IS 'Allows weekday lookup with several la
 
 
 --
--- TOC entry 222 (class 1259 OID 32804)
+-- TOC entry 222 (class 1259 OID 19528)
 -- Name: avg_price_by_weekday_name; Type: VIEW; Schema: public; Owner: postgres
 --
 
@@ -187,7 +187,7 @@ CREATE VIEW public.avg_price_by_weekday_name AS
 ALTER TABLE public.avg_price_by_weekday_name OWNER TO postgres;
 
 --
--- TOC entry 215 (class 1259 OID 32771)
+-- TOC entry 215 (class 1259 OID 19495)
 -- Name: current_prices; Type: VIEW; Schema: public; Owner: postgres
 --
 
@@ -211,25 +211,24 @@ COMMENT ON VIEW public.current_prices IS 'Shows electricity prices from now on';
 
 
 --
--- TOC entry 217 (class 1259 OID 32779)
+-- TOC entry 216 (class 1259 OID 19499)
 -- Name: running_average; Type: VIEW; Schema: public; Owner: postgres
 --
 
 CREATE VIEW public.running_average AS
- SELECT current_prices.kello,
-    current_prices.hinta
-   FROM public.current_prices;
+ SELECT round((avg(hourly_price.price))::numeric, 3) AS keskihinta
+   FROM public.hourly_price;
 
 
 ALTER TABLE public.running_average OWNER TO postgres;
 
 --
 -- TOC entry 3371 (class 0 OID 0)
--- Dependencies: 217
+-- Dependencies: 216
 -- Name: VIEW running_average; Type: COMMENT; Schema: public; Owner: postgres
 --
 
-COMMENT ON VIEW public.running_average IS 'Show';
+COMMENT ON VIEW public.running_average IS 'Calculates average electricity price from all rows';
 
 
 --
@@ -238,9 +237,9 @@ COMMENT ON VIEW public.running_average IS 'Show';
 -- Data for Name: hourly_price; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.hourly_price VALUES ('2023-09-12 19:00:00+03', 13.99);
 INSERT INTO public.hourly_price VALUES ('2023-09-12 18:00:00+03', 12.5);
-INSERT INTO public.hourly_price VALUES ('2023-09-12 20:00:00+03', 14.100000381469727);
+INSERT INTO public.hourly_price VALUES ('2023-09-12 17:00:00+03', 14.100000381469727);
+INSERT INTO public.hourly_price VALUES ('2023-09-12 19:00:00+03', 13.99);
 INSERT INTO public.hourly_price VALUES ('2023-09-14 13:00:00+03', 10.15);
 INSERT INTO public.hourly_price VALUES ('2023-09-14 14:00:00+03', 10.5);
 INSERT INTO public.hourly_price VALUES ('2023-09-14 15:00:00+03', 14.25);
@@ -257,18 +256,18 @@ INSERT INTO public.hourly_price VALUES ('2023-08-14 15:00:00+03', 30);
 
 
 --
--- TOC entry 3358 (class 0 OID 32791)
+-- TOC entry 3358 (class 0 OID 19515)
 -- Dependencies: 220
 -- Data for Name: weekday_lookup; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.weekday_lookup VALUES (1, 'maanantai', 'måndag', 'monday', 'montag', 'pazartesi');
-INSERT INTO public.weekday_lookup VALUES (2, 'tiistai', 'tistag', 'tuesday', 'dienstag', 'sali');
-INSERT INTO public.weekday_lookup VALUES (3, 'keskiviikko', 'onsdag', 'wednesday', 'mittwoch', 'carsamba');
-INSERT INTO public.weekday_lookup VALUES (4, 'torstai', 'torsdag', 'thursday', 'donnerstag', 'persembe');
-INSERT INTO public.weekday_lookup VALUES (5, 'perjantai', 'fredag', 'friday', 'freitag', 'cuma');
-INSERT INTO public.weekday_lookup VALUES (6, 'lauantai', 'lördag', 'saturday', 'samstag', 'cumartesi');
-INSERT INTO public.weekday_lookup VALUES (7, 'sunnuntai', 'söndag', 'sunday', 'sonntag', 'pazar');
+INSERT INTO public.weekday_lookup VALUES (1, 'maanantai', 'måndag', 'monday', 'Montag', 'Pazartesi');
+INSERT INTO public.weekday_lookup VALUES (2, 'tiistai', 'tisdag', 'tuesday', 'Dienstag', 'Sali');
+INSERT INTO public.weekday_lookup VALUES (3, 'keskiviikko', 'onsdag', 'wednesday', 'Mittwoch', 'Carsamba');
+INSERT INTO public.weekday_lookup VALUES (4, 'torstai', 'torsdag', 'thursday', 'Donnerstag', 'Persemble');
+INSERT INTO public.weekday_lookup VALUES (5, 'perjantai', 'fredag', 'friday', 'Freitag', 'Cuma');
+INSERT INTO public.weekday_lookup VALUES (6, 'lauantai', 'lördag', 'saturday', 'Samstag', 'Cumartesi');
+INSERT INTO public.weekday_lookup VALUES (7, 'sunnuntai', 'söndag', 'sunday', 'Sonntag', 'Pazar');
 
 
 --
@@ -281,7 +280,7 @@ ALTER TABLE ONLY public.hourly_price
 
 
 --
--- TOC entry 3207 (class 2606 OID 32795)
+-- TOC entry 3207 (class 2606 OID 19519)
 -- Name: weekday_lookup weekday_lookup_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -289,9 +288,8 @@ ALTER TABLE ONLY public.weekday_lookup
     ADD CONSTRAINT weekday_lookup_pk PRIMARY KEY (weekday_number);
 
 
--- Completed on 2023-09-14 15:55:15
+-- Completed on 2023-09-14 15:55:13
 
 --
 -- PostgreSQL database dump complete
 --
-

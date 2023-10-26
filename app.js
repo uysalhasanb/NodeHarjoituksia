@@ -45,7 +45,7 @@ app.get('/', (req, res) => {
     cprice.getCurrentPrice().then((resultset) => {
         console.log(resultset.rows[0])
         // FIXME in database "hinta" on index.handlebars "price"
-        homePageData.price = resultset.rows[0]
+        homePageData.price = resultset.rows[0]['price']
     })
 
     // Render index.handlebars and send dynamic data to the page
