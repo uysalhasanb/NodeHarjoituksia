@@ -1,6 +1,6 @@
 
 {{!-- Simulated data rendered from app.js routes section --}}
-<p>Tämä on testiaikainen kotisivu, jossa on simuloitua dataa</p>
+<p>Tämä on testiaikainen kotisivu, jossa sähkön nykyinen tuntihinta tulee tietokannan näkymästä.</p>
 <h1>Sähkö on nyt kallista</h1>
 <h1 class="expensive">{{price}} snt/kWh</h1>
 <h2>Tuuli {{wind}} m/s</h2>
@@ -31,7 +31,7 @@
         let s = date.getSeconds();
         let weekdayNumber = date.getDay();
         let day = date.getDate();
-        let month = date.getMonth()+1;
+        let month = date.getMonth() + 1;
         let year = date.getFullYear();
 
         // Add leading zeros in simplified if
