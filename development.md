@@ -1,4 +1,4 @@
-# Development branch for versinon .
+# Development branch for versinon 0.1
 
 **Do not commit your code directly to this branch!** Create a feature branch from this instead. Then commit new or edited code to the feature branch. 
 
