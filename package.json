@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/HasanbasriUysal/NodeHarjoituksia.git"
+    "url": "git+https://github.com/TiViOpetus/NodeHarjoituksia.git"
   },
   "keywords": [
     "Express",
@@ -17,14 +17,13 @@
     "Electricity",
     "prices"
   ],
-  "author": "Hasan Uysal",
+  "author": "Mika Vainio",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/HasanbasriUysal/NodeHarjoituksia/issues"
+    "url": "https://github.com/TiViOpetus/NodeHarjoituksia/issues"
   },
-  "homepage": "https://github.com/HasanbasriUysal/NodeHarjoituksia#readme",
+  "homepage": "https://github.com/TiViOpetus/NodeHarjoituksia#readme",
   "dependencies": {
-    "camaro": "^6.2.1",
     "express": "^4.18.2",
     "express-handlebars": "^7.1.2",
     "mathjs": "^11.11.2",
