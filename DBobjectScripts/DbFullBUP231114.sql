@@ -5,7 +5,7 @@
 -- Dumped from database version 15.4
 -- Dumped by pg_dump version 15.4
 
--- Started on 2023-11-14 10:25:28
+-- Started on 2023-12-14 11:28:47
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -36,7 +36,7 @@ CREATE TABLE public.hourly_price (
 ALTER TABLE public.hourly_price OWNER TO postgres;
 
 --
--- TOC entry 3405 (class 0 OID 0)
+-- TOC entry 3439 (class 0 OID 0)
 -- Dependencies: 214
 -- Name: TABLE hourly_price; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -45,7 +45,7 @@ COMMENT ON TABLE public.hourly_price IS 'Electricity prices by hour';
 
 
 --
--- TOC entry 219 (class 1259 OID 19520)
+-- TOC entry 220 (class 1259 OID 32796)
 -- Name: average_by_weekday_num; Type: VIEW; Schema: public; Owner: postgres
 --
 
@@ -60,8 +60,8 @@ CREATE VIEW public.average_by_weekday_num AS
 ALTER TABLE public.average_by_weekday_num OWNER TO postgres;
 
 --
--- TOC entry 3406 (class 0 OID 0)
--- Dependencies: 219
+-- TOC entry 3440 (class 0 OID 0)
+-- Dependencies: 220
 -- Name: VIEW average_by_weekday_num; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -69,7 +69,7 @@ COMMENT ON VIEW public.average_by_weekday_num IS 'Calculates an average for each
 
 
 --
--- TOC entry 216 (class 1259 OID 19503)
+-- TOC entry 216 (class 1259 OID 32775)
 -- Name: average_by_year; Type: VIEW; Schema: public; Owner: postgres
 --
 
@@ -83,7 +83,7 @@ CREATE VIEW public.average_by_year AS
 ALTER TABLE public.average_by_year OWNER TO postgres;
 
 --
--- TOC entry 3407 (class 0 OID 0)
+-- TOC entry 3441 (class 0 OID 0)
 -- Dependencies: 216
 -- Name: VIEW average_by_year; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -92,32 +92,7 @@ COMMENT ON VIEW public.average_by_year IS 'Average electricity prices on yearly 
 
 
 --
--- TOC entry 217 (class 1259 OID 19511)
--- Name: average_by_year-month_day; Type: VIEW; Schema: public; Owner: postgres
---
-
-CREATE VIEW public."average_by_year-month_day" AS
- SELECT EXTRACT(year FROM hourly_price.timeslot) AS vuosi,
-    EXTRACT(month FROM hourly_price.timeslot) AS kuukausi,
-    EXTRACT(day FROM hourly_price.timeslot) AS "päivä",
-    avg(hourly_price.price) AS keskihinta
-   FROM public.hourly_price
-  GROUP BY (EXTRACT(year FROM hourly_price.timeslot)), (EXTRACT(month FROM hourly_price.timeslot)), (EXTRACT(day FROM hourly_price.timeslot));
-
-
-ALTER TABLE public."average_by_year-month_day" OWNER TO postgres;
-
---
--- TOC entry 3408 (class 0 OID 0)
--- Dependencies: 217
--- Name: VIEW "average_by_year-month_day"; Type: COMMENT; Schema: public; Owner: postgres
---
-
-COMMENT ON VIEW public."average_by_year-month_day" IS 'Calculates averages to day level';
-
-
---
--- TOC entry 222 (class 1259 OID 19536)
+-- TOC entry 217 (class 1259 OID 32783)
 -- Name: average_by_year_and_month; Type: VIEW; Schema: public; Owner: postgres
 --
 
@@ -135,8 +110,8 @@ CREATE VIEW public.average_by_year_and_month AS
 ALTER TABLE public.average_by_year_and_month OWNER TO postgres;
 
 --
--- TOC entry 3409 (class 0 OID 0)
--- Dependencies: 222
+-- TOC entry 3442 (class 0 OID 0)
+-- Dependencies: 217
 -- Name: VIEW average_by_year_and_month; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -144,7 +119,32 @@ COMMENT ON VIEW public.average_by_year_and_month IS 'Calculates average electric
 
 
 --
--- TOC entry 218 (class 1259 OID 19515)
+-- TOC entry 218 (class 1259 OID 32787)
+-- Name: average_by_year_month_day; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW public.average_by_year_month_day AS
+ SELECT EXTRACT(year FROM hourly_price.timeslot) AS vuosi,
+    EXTRACT(month FROM hourly_price.timeslot) AS kuukausi,
+    EXTRACT(day FROM hourly_price.timeslot) AS "päivä",
+    avg(hourly_price.price) AS keskihinta
+   FROM public.hourly_price
+  GROUP BY (EXTRACT(year FROM hourly_price.timeslot)), (EXTRACT(month FROM hourly_price.timeslot)), (EXTRACT(day FROM hourly_price.timeslot));
+
+
+ALTER TABLE public.average_by_year_month_day OWNER TO postgres;
+
+--
+-- TOC entry 3443 (class 0 OID 0)
+-- Dependencies: 218
+-- Name: VIEW average_by_year_month_day; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON VIEW public.average_by_year_month_day IS 'Calculates averages to day level';
+
+
+--
+-- TOC entry 219 (class 1259 OID 32791)
 -- Name: weekday_lookup; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -161,8 +161,8 @@ CREATE TABLE public.weekday_lookup (
 ALTER TABLE public.weekday_lookup OWNER TO postgres;
 
 --
--- TOC entry 3410 (class 0 OID 0)
--- Dependencies: 218
+-- TOC entry 3444 (class 0 OID 0)
+-- Dependencies: 219
 -- Name: TABLE weekday_lookup; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -170,7 +170,7 @@ COMMENT ON TABLE public.weekday_lookup IS 'Allows weekday lookup with several la
 
 
 --
--- TOC entry 220 (class 1259 OID 19528)
+-- TOC entry 221 (class 1259 OID 32804)
 -- Name: avg_price_by_weekday_name; Type: VIEW; Schema: public; Owner: postgres
 --
 
@@ -190,13 +190,13 @@ CREATE VIEW public.avg_price_by_weekday_name AS
 ALTER TABLE public.avg_price_by_weekday_name OWNER TO postgres;
 
 --
--- TOC entry 226 (class 1259 OID 19651)
+-- TOC entry 215 (class 1259 OID 32771)
 -- Name: current_prices; Type: VIEW; Schema: public; Owner: postgres
 --
 
 CREATE VIEW public.current_prices AS
- SELECT hourly_price.timeslot,
-    hourly_price.price
+ SELECT hourly_price.timeslot AS kello,
+    hourly_price.price AS hinta
    FROM public.hourly_price
   WHERE (hourly_price.timeslot >= now())
   ORDER BY hourly_price.timeslot;
@@ -205,8 +205,8 @@ CREATE VIEW public.current_prices AS
 ALTER TABLE public.current_prices OWNER TO postgres;
 
 --
--- TOC entry 3411 (class 0 OID 0)
--- Dependencies: 226
+-- TOC entry 3445 (class 0 OID 0)
+-- Dependencies: 215
 -- Name: VIEW current_prices; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -214,7 +214,75 @@ COMMENT ON VIEW public.current_prices IS 'Shows electricity prices from now on';
 
 
 --
--- TOC entry 228 (class 1259 OID 36106)
+-- TOC entry 228 (class 1259 OID 245871)
+-- Name: observation; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.observation (
+    "timestamp" time with time zone NOT NULL,
+    place character varying(50) NOT NULL,
+    wind_speed real,
+    wind_direction real,
+    temperature real
+);
+
+
+ALTER TABLE public.observation OWNER TO postgres;
+
+--
+-- TOC entry 3446 (class 0 OID 0)
+-- Dependencies: 228
+-- Name: TABLE observation; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON TABLE public.observation IS 'Stores FMI weather observtions in 10 minute intervals';
+
+
+--
+-- TOC entry 3447 (class 0 OID 0)
+-- Dependencies: 228
+-- Name: COLUMN observation."timestamp"; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.observation."timestamp" IS 'ISO timestamp with timezone';
+
+
+--
+-- TOC entry 3448 (class 0 OID 0)
+-- Dependencies: 228
+-- Name: COLUMN observation.place; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.observation.place IS 'Name of weather station';
+
+
+--
+-- TOC entry 229 (class 1259 OID 245881)
+-- Name: current_weather; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW public.current_weather AS
+ SELECT observation.temperature AS "lämpötila",
+    observation.wind_speed AS tuuli,
+    observation.wind_direction AS suunta
+   FROM public.observation
+  ORDER BY observation."timestamp" DESC
+ LIMIT 1;
+
+
+ALTER TABLE public.current_weather OWNER TO postgres;
+
+--
+-- TOC entry 3449 (class 0 OID 0)
+-- Dependencies: 229
+-- Name: VIEW current_weather; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON VIEW public.current_weather IS 'Current weather observations';
+
+
+--
+-- TOC entry 234 (class 1259 OID 286830)
 -- Name: forecast; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -230,8 +298,8 @@ CREATE TABLE public.forecast (
 ALTER TABLE public.forecast OWNER TO postgres;
 
 --
--- TOC entry 3412 (class 0 OID 0)
--- Dependencies: 228
+-- TOC entry 3450 (class 0 OID 0)
+-- Dependencies: 234
 -- Name: TABLE forecast; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -239,8 +307,8 @@ COMMENT ON TABLE public.forecast IS 'FMI weather forecast for 36 hours';
 
 
 --
--- TOC entry 3413 (class 0 OID 0)
--- Dependencies: 228
+-- TOC entry 3451 (class 0 OID 0)
+-- Dependencies: 234
 -- Name: COLUMN forecast."timestamp"; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -248,8 +316,8 @@ COMMENT ON COLUMN public.forecast."timestamp" IS 'ISO timestamp with timezone';
 
 
 --
--- TOC entry 3414 (class 0 OID 0)
--- Dependencies: 228
+-- TOC entry 3452 (class 0 OID 0)
+-- Dependencies: 234
 -- Name: COLUMN forecast.place; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -257,23 +325,22 @@ COMMENT ON COLUMN public.forecast.place IS 'Name of weather station';
 
 
 --
--- TOC entry 227 (class 1259 OID 19655)
+-- TOC entry 226 (class 1259 OID 163877)
 -- Name: hourly_page; Type: VIEW; Schema: public; Owner: postgres
 --
 
 CREATE VIEW public.hourly_page AS
  SELECT EXTRACT(day FROM hourly_price.timeslot) AS day,
-    EXTRACT(hour FROM hourly_price.timeslot) AS hour,
+    EXTRACT(hour FROM hourly_price.timeslot) AS "time",
     hourly_price.price
    FROM public.hourly_price
-  WHERE (hourly_price.timeslot >= now())
-  ORDER BY (EXTRACT(day FROM hourly_price.timeslot)), (EXTRACT(hour FROM hourly_price.timeslot));
+  WHERE (hourly_price.timeslot >= now());
 
 
 ALTER TABLE public.hourly_page OWNER TO postgres;
 
 --
--- TOC entry 223 (class 1259 OID 19540)
+-- TOC entry 223 (class 1259 OID 40967)
 -- Name: month_name_lookup; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -290,16 +357,16 @@ CREATE TABLE public.month_name_lookup (
 ALTER TABLE public.month_name_lookup OWNER TO postgres;
 
 --
--- TOC entry 3415 (class 0 OID 0)
+-- TOC entry 3453 (class 0 OID 0)
 -- Dependencies: 223
 -- Name: TABLE month_name_lookup; Type: COMMENT; Schema: public; Owner: postgres
 --
 
-COMMENT ON TABLE public.month_name_lookup IS 'Gives a mont name by number';
+COMMENT ON TABLE public.month_name_lookup IS 'Gives a month name by number';
 
 
 --
--- TOC entry 224 (class 1259 OID 19545)
+-- TOC entry 224 (class 1259 OID 40980)
 -- Name: monthly_averages_by_year_fin; Type: VIEW; Schema: public; Owner: postgres
 --
 
@@ -316,7 +383,7 @@ CREATE VIEW public.monthly_averages_by_year_fin AS
 ALTER TABLE public.monthly_averages_by_year_fin OWNER TO postgres;
 
 --
--- TOC entry 3416 (class 0 OID 0)
+-- TOC entry 3454 (class 0 OID 0)
 -- Dependencies: 224
 -- Name: VIEW monthly_averages_by_year_fin; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -325,57 +392,12 @@ COMMENT ON VIEW public.monthly_averages_by_year_fin IS 'Monthly averages with Fi
 
 
 --
--- TOC entry 229 (class 1259 OID 36111)
--- Name: observation; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.observation (
-    "timestamp" timestamp with time zone NOT NULL,
-    place character varying(50) NOT NULL,
-    wind_speed real,
-    wind_direction real,
-    temperature real
-);
-
-
-ALTER TABLE public.observation OWNER TO postgres;
-
---
--- TOC entry 3417 (class 0 OID 0)
--- Dependencies: 229
--- Name: TABLE observation; Type: COMMENT; Schema: public; Owner: postgres
---
-
-COMMENT ON TABLE public.observation IS 'Stores FMI weather observations in 10 minute intervals';
-
-
---
--- TOC entry 3418 (class 0 OID 0)
--- Dependencies: 229
--- Name: COLUMN observation."timestamp"; Type: COMMENT; Schema: public; Owner: postgres
---
-
-COMMENT ON COLUMN public.observation."timestamp" IS 'ISO timestamp with timezone';
-
-
---
--- TOC entry 3419 (class 0 OID 0)
--- Dependencies: 229
--- Name: COLUMN observation.place; Type: COMMENT; Schema: public; Owner: postgres
---
-
-COMMENT ON COLUMN public.observation.place IS 'Name of weather station';
-
-
---
--- TOC entry 225 (class 1259 OID 19553)
+-- TOC entry 225 (class 1259 OID 122911)
 -- Name: previous_month_average; Type: VIEW; Schema: public; Owner: postgres
 --
 
 CREATE VIEW public.previous_month_average AS
- SELECT average_by_year_and_month.keskihinta,
-    average_by_year_and_month."yläraja",
-    average_by_year_and_month.alaraja
+ SELECT average_by_year_and_month.keskihinta
    FROM public.average_by_year_and_month
   WHERE ((average_by_year_and_month.vuosi = EXTRACT(year FROM now())) AND (average_by_year_and_month.kuukausi = (EXTRACT(month FROM now()) - (1)::numeric)));
 
@@ -383,81 +405,113 @@ CREATE VIEW public.previous_month_average AS
 ALTER TABLE public.previous_month_average OWNER TO postgres;
 
 --
--- TOC entry 215 (class 1259 OID 19499)
--- Name: running_average; Type: VIEW; Schema: public; Owner: postgres
+-- TOC entry 227 (class 1259 OID 172069)
+-- Name: previous_month_average2; Type: VIEW; Schema: public; Owner: postgres
 --
 
-CREATE VIEW public.running_average AS
- SELECT round((avg(hourly_price.price))::numeric, 3) AS keskihinta
-   FROM public.hourly_price;
+CREATE VIEW public.previous_month_average2 AS
+ SELECT average_by_year_and_month.keskihinta,
+    average_by_year_and_month."yläraja",
+    average_by_year_and_month.alaraja
+   FROM public.average_by_year_and_month
+  WHERE ((average_by_year_and_month.vuosi = EXTRACT(year FROM now())) AND (average_by_year_and_month.kuukausi = (EXTRACT(month FROM now()) - (1)::numeric)));
 
 
-ALTER TABLE public.running_average OWNER TO postgres;
-
---
--- TOC entry 3420 (class 0 OID 0)
--- Dependencies: 215
--- Name: VIEW running_average; Type: COMMENT; Schema: public; Owner: postgres
---
-
-COMMENT ON VIEW public.running_average IS 'Calculates average electricity price from all rows';
-
+ALTER TABLE public.previous_month_average2 OWNER TO postgres;
 
 --
--- TOC entry 221 (class 1259 OID 19532)
--- Name: running_average_stdev; Type: VIEW; Schema: public; Owner: postgres
+-- TOC entry 222 (class 1259 OID 40963)
+-- Name: running_average_stddev; Type: VIEW; Schema: public; Owner: postgres
 --
 
-CREATE VIEW public.running_average_stdev AS
+CREATE VIEW public.running_average_stddev AS
  SELECT avg(hourly_price.price) AS hinta,
     stddev(hourly_price.price) AS keskihajonta
    FROM public.hourly_price;
 
 
-ALTER TABLE public.running_average_stdev OWNER TO postgres;
+ALTER TABLE public.running_average_stddev OWNER TO postgres;
 
 --
--- TOC entry 3421 (class 0 OID 0)
--- Dependencies: 221
--- Name: VIEW running_average_stdev; Type: COMMENT; Schema: public; Owner: postgres
+-- TOC entry 3455 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: VIEW running_average_stddev; Type: COMMENT; Schema: public; Owner: postgres
 --
 
-COMMENT ON VIEW public.running_average_stdev IS 'Calcultates average electricity price and standard deviation from whole price data';
+COMMENT ON VIEW public.running_average_stddev IS 'Calculates  average electricity price and standard deviation from whole price data';
 
 
 --
--- TOC entry 3398 (class 0 OID 36106)
--- Dependencies: 228
+-- TOC entry 230 (class 1259 OID 245885)
+-- Name: temperature_observation; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.temperature_observation (
+    "timestamp" time with time zone NOT NULL,
+    temperature real,
+    place character varying(80) NOT NULL
+);
+
+
+ALTER TABLE public.temperature_observation OWNER TO postgres;
+
+--
+-- TOC entry 233 (class 1259 OID 245900)
+-- Name: weather_station; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.weather_station (
+    place character varying(80) NOT NULL,
+    fmi_sid character varying,
+    lat real,
+    lon real
+);
+
+
+ALTER TABLE public.weather_station OWNER TO postgres;
+
+--
+-- TOC entry 232 (class 1259 OID 245895)
+-- Name: wind_direction_observation; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.wind_direction_observation (
+    "timestamp" timestamp with time zone NOT NULL,
+    wind_direction real,
+    place character varying(80) NOT NULL
+);
+
+
+ALTER TABLE public.wind_direction_observation OWNER TO postgres;
+
+--
+-- TOC entry 231 (class 1259 OID 245890)
+-- Name: wind_speed_observation; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.wind_speed_observation (
+    "timestamp" time with time zone NOT NULL,
+    wind_speed real,
+    place character varying(80) NOT NULL
+);
+
+
+ALTER TABLE public.wind_speed_observation OWNER TO postgres;
+
+--
+-- TOC entry 3433 (class 0 OID 286830)
+-- Dependencies: 234
 -- Data for Name: forecast; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3395 (class 0 OID 19487)
+-- TOC entry 3425 (class 0 OID 19487)
 -- Dependencies: 214
 -- Data for Name: hourly_price; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.hourly_price VALUES ('2023-09-25 15:30:00+03', 0.03);
-INSERT INTO public.hourly_price VALUES ('2023-09-29 00:00:00+03', -0.065);
-INSERT INTO public.hourly_price VALUES ('2023-09-28 21:00:00+03', 0.34);
-INSERT INTO public.hourly_price VALUES ('2023-09-28 16:00:00+03', 1.86);
-INSERT INTO public.hourly_price VALUES ('2023-09-28 18:00:00+03', 3.72);
-INSERT INTO public.hourly_price VALUES ('2023-09-28 17:00:00+03', 3.72);
-INSERT INTO public.hourly_price VALUES ('2023-10-05 00:00:00+03', -0.016);
-INSERT INTO public.hourly_price VALUES ('2023-10-04 14:00:00+03', 0.62);
-INSERT INTO public.hourly_price VALUES ('2023-10-04 13:00:00+03', 3.761);
-INSERT INTO public.hourly_price VALUES ('2023-10-04 12:00:00+03', 7.265);
-INSERT INTO public.hourly_price VALUES ('2023-10-04 11:00:00+03', 8.995);
-INSERT INTO public.hourly_price VALUES ('2023-10-04 10:00:00+03', 12.419);
-INSERT INTO public.hourly_price VALUES ('2023-10-04 09:00:00+03', 12.427);
-INSERT INTO public.hourly_price VALUES ('2023-10-04 08:00:00+03', 10.99);
-INSERT INTO public.hourly_price VALUES ('2023-10-04 07:00:00+03', 11.533);
-INSERT INTO public.hourly_price VALUES ('2023-10-04 06:00:00+03', 0.366);
-INSERT INTO public.hourly_price VALUES ('2023-10-04 05:00:00+03', 0.066);
-INSERT INTO public.hourly_price VALUES ('2023-10-04 04:00:00+03', -0.001);
-INSERT INTO public.hourly_price VALUES ('2023-03-23 02:00:00+02', 2.35);
 INSERT INTO public.hourly_price VALUES ('2023-03-23 03:00:00+02', 1.09);
 INSERT INTO public.hourly_price VALUES ('2023-03-23 04:00:00+02', 0.55);
 INSERT INTO public.hourly_price VALUES ('2023-03-23 05:00:00+02', 0.45);
@@ -481,55 +535,55 @@ INSERT INTO public.hourly_price VALUES ('2023-03-23 22:00:00+02', 6.28);
 INSERT INTO public.hourly_price VALUES ('2023-03-23 23:00:00+02', 5.26);
 INSERT INTO public.hourly_price VALUES ('2023-03-24 00:00:00+02', 4.94);
 INSERT INTO public.hourly_price VALUES ('2023-03-24 01:00:00+02', 4.6);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 02:00:00+02', 4.09);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 03:00:00+02', 3.66);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 04:00:00+02', 3.35);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 05:00:00+02', 3.33);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 06:00:00+02', 3.41);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 07:00:00+02', 3.73);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 08:00:00+02', 4.31);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 09:00:00+02', 4.93);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 10:00:00+02', 6.44);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 11:00:00+02', 8.37);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 12:00:00+02', 6.47);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 13:00:00+02', 4.4);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 14:00:00+02', 3.76);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 15:00:00+02', 4.01);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 16:00:00+02', 3.27);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 17:00:00+02', 3.38);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 18:00:00+02', 3.3);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 19:00:00+02', 4.22);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 20:00:00+02', 5.49);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 21:00:00+02', 5.56);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 22:00:00+02', 4.93);
-INSERT INTO public.hourly_price VALUES ('2023-03-24 23:00:00+02', 4.39);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 00:00:00+02', 4.19);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 01:00:00+02', 3.72);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 02:00:00+02', 3.26);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 03:00:00+02', 2.6);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 04:00:00+02', 0.72);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 05:00:00+02', 0.33);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 06:00:00+02', 0.23);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 07:00:00+02', 0.2);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 08:00:00+02', 0.32);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 09:00:00+02', 0.51);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 10:00:00+02', 2.53);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 11:00:00+02', 2.79);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 12:00:00+02', 3.14);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 13:00:00+02', 3.13);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 14:00:00+02', 3.1);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 15:00:00+02', 3.08);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 16:00:00+02', 3.1);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 17:00:00+02', 3.25);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 18:00:00+02', 3.98);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 19:00:00+02', 4.47);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 20:00:00+02', 4.79);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 21:00:00+02', 6.6);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 22:00:00+02', 7.05);
-INSERT INTO public.hourly_price VALUES ('2023-03-25 23:00:00+02', 6.31);
-INSERT INTO public.hourly_price VALUES ('2023-03-26 00:00:00+02', 4.6);
-INSERT INTO public.hourly_price VALUES ('2023-03-26 01:00:00+02', 4.28);
-INSERT INTO public.hourly_price VALUES ('2023-03-26 02:00:00+02', 3.67);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 03:00:00+03', 4.09);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 04:00:00+03', 3.66);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 05:00:00+03', 3.35);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 06:00:00+03', 3.33);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 07:00:00+03', 3.41);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 08:00:00+03', 3.73);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 09:00:00+03', 4.31);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 10:00:00+03', 4.93);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 11:00:00+03', 6.44);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 12:00:00+03', 8.37);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 13:00:00+03', 6.47);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 14:00:00+03', 4.4);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 15:00:00+03', 3.76);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 16:00:00+03', 4.01);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 17:00:00+03', 3.27);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 18:00:00+03', 3.38);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 19:00:00+03', 3.3);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 20:00:00+03', 4.22);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 21:00:00+03', 5.49);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 22:00:00+03', 5.56);
+INSERT INTO public.hourly_price VALUES ('2023-03-24 23:00:00+03', 4.93);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 00:00:00+03', 4.39);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 01:00:00+03', 4.19);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 02:00:00+03', 3.72);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 03:00:00+03', 3.26);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 04:00:00+03', 2.6);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 05:00:00+03', 0.72);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 06:00:00+03', 0.33);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 07:00:00+03', 0.23);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 08:00:00+03', 0.2);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 09:00:00+03', 0.32);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 10:00:00+03', 0.51);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 11:00:00+03', 2.53);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 12:00:00+03', 2.79);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 13:00:00+03', 3.14);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 14:00:00+03', 3.13);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 15:00:00+03', 3.1);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 16:00:00+03', 3.08);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 17:00:00+03', 3.1);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 18:00:00+03', 3.25);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 19:00:00+03', 3.98);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 20:00:00+03', 4.47);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 21:00:00+03', 4.79);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 22:00:00+03', 6.6);
+INSERT INTO public.hourly_price VALUES ('2023-03-25 23:00:00+03', 7.05);
+INSERT INTO public.hourly_price VALUES ('2023-03-26 00:00:00+03', 6.31);
+INSERT INTO public.hourly_price VALUES ('2023-03-26 01:00:00+03', 4.6);
+INSERT INTO public.hourly_price VALUES ('2023-03-26 02:00:00+03', 4.28);
+INSERT INTO public.hourly_price VALUES ('2023-03-26 03:00:00+03', 3.67);
 INSERT INTO public.hourly_price VALUES ('2023-03-26 04:00:00+03', 4.36);
 INSERT INTO public.hourly_price VALUES ('2023-03-26 05:00:00+03', 4.32);
 INSERT INTO public.hourly_price VALUES ('2023-03-26 06:00:00+03', 4.41);
@@ -4801,276 +4855,85 @@ INSERT INTO public.hourly_price VALUES ('2023-09-19 23:00:00+03', 0.01);
 INSERT INTO public.hourly_price VALUES ('2023-09-20 00:00:00+03', 0);
 INSERT INTO public.hourly_price VALUES ('2023-09-20 01:00:00+03', -0.01);
 INSERT INTO public.hourly_price VALUES ('2023-09-20 02:00:00+03', -0.05);
-INSERT INTO public.hourly_price VALUES ('2023-09-28 22:00:00+03', 0.208);
-INSERT INTO public.hourly_price VALUES ('2023-09-28 14:00:00+03', 4.953);
-INSERT INTO public.hourly_price VALUES ('2023-09-28 13:00:00+03', 8.26);
-INSERT INTO public.hourly_price VALUES ('2023-09-28 12:00:00+03', 10.981);
-INSERT INTO public.hourly_price VALUES ('2023-09-28 11:00:00+03', 11.577);
-INSERT INTO public.hourly_price VALUES ('2023-09-28 10:00:00+03', 13.745);
-INSERT INTO public.hourly_price VALUES ('2023-09-28 09:00:00+03', 6.201);
-INSERT INTO public.hourly_price VALUES ('2023-09-28 08:00:00+03', 4.09);
-INSERT INTO public.hourly_price VALUES ('2023-09-28 07:00:00+03', 0.991);
-INSERT INTO public.hourly_price VALUES ('2023-09-28 06:00:00+03', 0.472);
-INSERT INTO public.hourly_price VALUES ('2023-09-28 05:00:00+03', 0.257);
-INSERT INTO public.hourly_price VALUES ('2023-09-28 04:00:00+03', 0.207);
-INSERT INTO public.hourly_price VALUES ('2023-09-28 03:00:00+03', 0.229);
-INSERT INTO public.hourly_price VALUES ('2023-09-28 02:00:00+03', 0.246);
-INSERT INTO public.hourly_price VALUES ('2023-09-28 01:00:00+03', 0.255);
-INSERT INTO public.hourly_price VALUES ('2023-09-28 00:00:00+03', 0.254);
-INSERT INTO public.hourly_price VALUES ('2023-09-27 23:00:00+03', 0.283);
-INSERT INTO public.hourly_price VALUES ('2023-09-27 22:00:00+03', 0.366);
-INSERT INTO public.hourly_price VALUES ('2023-09-27 21:00:00+03', 0.425);
-INSERT INTO public.hourly_price VALUES ('2023-09-27 20:00:00+03', 0.515);
-INSERT INTO public.hourly_price VALUES ('2023-09-27 19:00:00+03', 0.57);
-INSERT INTO public.hourly_price VALUES ('2023-09-27 18:00:00+03', 0.476);
-INSERT INTO public.hourly_price VALUES ('2023-09-27 17:00:00+03', 0.405);
-INSERT INTO public.hourly_price VALUES ('2023-09-27 16:00:00+03', 0.363);
-INSERT INTO public.hourly_price VALUES ('2023-09-27 15:00:00+03', 0.365);
-INSERT INTO public.hourly_price VALUES ('2023-09-27 14:00:00+03', 0.408);
-INSERT INTO public.hourly_price VALUES ('2023-09-27 13:00:00+03', 0.587);
-INSERT INTO public.hourly_price VALUES ('2023-09-27 12:00:00+03', 0.706);
-INSERT INTO public.hourly_price VALUES ('2023-09-27 11:00:00+03', 0.856);
-INSERT INTO public.hourly_price VALUES ('2023-09-27 10:00:00+03', 7.186);
-INSERT INTO public.hourly_price VALUES ('2023-09-27 09:00:00+03', 15.493);
-INSERT INTO public.hourly_price VALUES ('2023-09-27 08:00:00+03', 1.195);
-INSERT INTO public.hourly_price VALUES ('2023-09-27 07:00:00+03', 0.397);
-INSERT INTO public.hourly_price VALUES ('2023-09-27 06:00:00+03', 0.273);
-INSERT INTO public.hourly_price VALUES ('2023-09-27 05:00:00+03', 0.175);
-INSERT INTO public.hourly_price VALUES ('2023-09-27 04:00:00+03', 0.162);
-INSERT INTO public.hourly_price VALUES ('2023-09-27 03:00:00+03', 0.166);
-INSERT INTO public.hourly_price VALUES ('2023-09-27 02:00:00+03', 0.145);
-INSERT INTO public.hourly_price VALUES ('2023-09-27 01:00:00+03', 0.187);
-INSERT INTO public.hourly_price VALUES ('2023-09-28 23:00:00+03', 0.007);
-INSERT INTO public.hourly_price VALUES ('2023-09-28 15:00:00+03', 2.48);
-INSERT INTO public.hourly_price VALUES ('2023-09-28 20:00:00+03', 0.533);
-INSERT INTO public.hourly_price VALUES ('2023-09-28 19:00:00+03', 3.721);
-INSERT INTO public.hourly_price VALUES ('2023-10-04 03:00:00+03', -0.002);
-INSERT INTO public.hourly_price VALUES ('2023-10-04 02:00:00+03', 0.001);
-INSERT INTO public.hourly_price VALUES ('2023-10-04 01:00:00+03', 0.016);
-INSERT INTO public.hourly_price VALUES ('2023-10-04 00:00:00+03', 0.091);
-INSERT INTO public.hourly_price VALUES ('2023-10-03 23:00:00+03', 0.334);
-INSERT INTO public.hourly_price VALUES ('2023-10-03 22:00:00+03', 0.507);
-INSERT INTO public.hourly_price VALUES ('2023-10-03 21:00:00+03', 0.667);
-INSERT INTO public.hourly_price VALUES ('2023-10-03 20:00:00+03', 11.973);
-INSERT INTO public.hourly_price VALUES ('2023-10-03 19:00:00+03', 12.432);
-INSERT INTO public.hourly_price VALUES ('2023-10-03 18:00:00+03', 11.26);
-INSERT INTO public.hourly_price VALUES ('2023-10-03 17:00:00+03', 7.438);
-INSERT INTO public.hourly_price VALUES ('2023-10-03 16:00:00+03', 6.821);
-INSERT INTO public.hourly_price VALUES ('2023-10-03 15:00:00+03', 3.72);
-INSERT INTO public.hourly_price VALUES ('2023-10-03 14:00:00+03', 3.72);
-INSERT INTO public.hourly_price VALUES ('2023-10-03 13:00:00+03', 3.72);
-INSERT INTO public.hourly_price VALUES ('2023-10-03 12:00:00+03', 8.061);
-INSERT INTO public.hourly_price VALUES ('2023-10-03 11:00:00+03', 13.641);
-INSERT INTO public.hourly_price VALUES ('2023-10-03 10:00:00+03', 13.645);
-INSERT INTO public.hourly_price VALUES ('2023-10-03 09:00:00+03', 16.652);
-INSERT INTO public.hourly_price VALUES ('2023-10-03 08:00:00+03', 13.641);
-INSERT INTO public.hourly_price VALUES ('2023-10-03 07:00:00+03', 0.764);
-INSERT INTO public.hourly_price VALUES ('2023-10-03 06:00:00+03', 0.547);
-INSERT INTO public.hourly_price VALUES ('2023-10-03 05:00:00+03', 0.397);
-INSERT INTO public.hourly_price VALUES ('2023-10-03 04:00:00+03', 0.368);
-INSERT INTO public.hourly_price VALUES ('2023-10-03 03:00:00+03', 0.367);
-INSERT INTO public.hourly_price VALUES ('2023-10-03 02:00:00+03', 0.367);
-INSERT INTO public.hourly_price VALUES ('2023-10-03 01:00:00+03', 0.371);
-INSERT INTO public.hourly_price VALUES ('2023-10-04 18:00:00+03', 3.099);
-INSERT INTO public.hourly_price VALUES ('2023-10-04 21:00:00+03', 0.219);
-INSERT INTO public.hourly_price VALUES ('2023-10-04 22:00:00+03', 0.18);
-INSERT INTO public.hourly_price VALUES ('2023-10-04 19:00:00+03', 16.406);
-INSERT INTO public.hourly_price VALUES ('2023-10-04 20:00:00+03', 0.621);
-INSERT INTO public.hourly_price VALUES ('2023-10-04 15:00:00+03', 0.438);
-INSERT INTO public.hourly_price VALUES ('2023-10-04 17:00:00+03', 4.953);
-INSERT INTO public.hourly_price VALUES ('2023-10-04 16:00:00+03', 1.117);
-INSERT INTO public.hourly_price VALUES ('2023-10-04 23:00:00+03', 0.032);
-INSERT INTO public.hourly_price VALUES ('2023-10-26 00:00:00+03', 2.499);
-INSERT INTO public.hourly_price VALUES ('2023-10-25 14:00:00+03', 8.68);
-INSERT INTO public.hourly_price VALUES ('2023-10-25 13:00:00+03', 8.061);
-INSERT INTO public.hourly_price VALUES ('2023-10-25 23:00:00+03', 3.757);
-INSERT INTO public.hourly_price VALUES ('2023-10-25 12:00:00+03', 15.49);
-INSERT INTO public.hourly_price VALUES ('2023-10-25 11:00:00+03', 14.879);
-INSERT INTO public.hourly_price VALUES ('2023-10-25 10:00:00+03', 12.829);
-INSERT INTO public.hourly_price VALUES ('2023-10-25 09:00:00+03', 13.092);
-INSERT INTO public.hourly_price VALUES ('2023-10-25 08:00:00+03', 15.488);
-INSERT INTO public.hourly_price VALUES ('2023-10-25 07:00:00+03', 7.44);
-INSERT INTO public.hourly_price VALUES ('2023-10-25 06:00:00+03', 6.547);
-INSERT INTO public.hourly_price VALUES ('2023-10-25 05:00:00+03', 4.801);
-INSERT INTO public.hourly_price VALUES ('2023-10-25 04:00:00+03', 2.481);
-INSERT INTO public.hourly_price VALUES ('2023-10-25 03:00:00+03', 3.05);
-INSERT INTO public.hourly_price VALUES ('2023-10-25 02:00:00+03', 3.556);
-INSERT INTO public.hourly_price VALUES ('2023-10-25 01:00:00+03', 4.562);
-INSERT INTO public.hourly_price VALUES ('2023-10-25 00:00:00+03', 2.649);
-INSERT INTO public.hourly_price VALUES ('2023-10-24 23:00:00+03', 4.959);
-INSERT INTO public.hourly_price VALUES ('2023-10-24 22:00:00+03', 4.96);
-INSERT INTO public.hourly_price VALUES ('2023-10-24 21:00:00+03', 5.249);
-INSERT INTO public.hourly_price VALUES ('2023-10-24 20:00:00+03', 19.547);
-INSERT INTO public.hourly_price VALUES ('2023-10-24 19:00:00+03', 20.47);
-INSERT INTO public.hourly_price VALUES ('2023-10-24 18:00:00+03', 22.631);
-INSERT INTO public.hourly_price VALUES ('2023-10-24 17:00:00+03', 9.227);
-INSERT INTO public.hourly_price VALUES ('2023-10-24 16:00:00+03', 9.172);
-INSERT INTO public.hourly_price VALUES ('2023-10-24 15:00:00+03', 15.489);
-INSERT INTO public.hourly_price VALUES ('2023-10-24 14:00:00+03', 14.606);
-INSERT INTO public.hourly_price VALUES ('2023-10-24 13:00:00+03', 12.282);
-INSERT INTO public.hourly_price VALUES ('2023-10-24 12:00:00+03', 11.368);
-INSERT INTO public.hourly_price VALUES ('2023-10-24 11:00:00+03', 15.918);
-INSERT INTO public.hourly_price VALUES ('2023-10-24 10:00:00+03', 16.907);
-INSERT INTO public.hourly_price VALUES ('2023-10-24 09:00:00+03', 20.467);
-INSERT INTO public.hourly_price VALUES ('2023-10-24 08:00:00+03', 20.472);
-INSERT INTO public.hourly_price VALUES ('2023-10-24 07:00:00+03', 8.214);
-INSERT INTO public.hourly_price VALUES ('2023-10-24 05:00:00+03', 3.436);
-INSERT INTO public.hourly_price VALUES ('2023-10-24 06:00:00+03', 5.476);
-INSERT INTO public.hourly_price VALUES ('2023-10-24 04:00:00+03', 3.102);
-INSERT INTO public.hourly_price VALUES ('2023-10-24 03:00:00+03', 3.054);
-INSERT INTO public.hourly_price VALUES ('2023-10-24 02:00:00+03', 3.129);
-INSERT INTO public.hourly_price VALUES ('2023-10-24 01:00:00+03', 3.207);
-INSERT INTO public.hourly_price VALUES ('2023-10-25 22:00:00+03', 3.101);
-INSERT INTO public.hourly_price VALUES ('2023-10-25 19:00:00+03', 8.072);
-INSERT INTO public.hourly_price VALUES ('2023-10-25 21:00:00+03', 3.198);
-INSERT INTO public.hourly_price VALUES ('2023-10-25 20:00:00+03', 5.054);
-INSERT INTO public.hourly_price VALUES ('2023-10-25 17:00:00+03', 8.68);
-INSERT INTO public.hourly_price VALUES ('2023-10-25 16:00:00+03', 7.439);
-INSERT INTO public.hourly_price VALUES ('2023-10-25 15:00:00+03', 7.44);
-INSERT INTO public.hourly_price VALUES ('2023-10-25 18:00:00+03', 8.065);
-INSERT INTO public.hourly_price VALUES ('2023-10-26 19:00:00+03', 9.429);
-INSERT INTO public.hourly_price VALUES ('2023-10-26 14:00:00+03', 8.676);
-INSERT INTO public.hourly_price VALUES ('2023-10-26 13:00:00+03', 8.93);
-INSERT INTO public.hourly_price VALUES ('2023-10-26 12:00:00+03', 8.934);
-INSERT INTO public.hourly_price VALUES ('2023-10-26 11:00:00+03', 8.488);
-INSERT INTO public.hourly_price VALUES ('2023-10-26 10:00:00+03', 8.484);
-INSERT INTO public.hourly_price VALUES ('2023-10-26 09:00:00+03', 7.13);
-INSERT INTO public.hourly_price VALUES ('2023-10-26 08:00:00+03', 7.671);
-INSERT INTO public.hourly_price VALUES ('2023-10-26 07:00:00+03', 4.437);
-INSERT INTO public.hourly_price VALUES ('2023-10-26 06:00:00+03', 3.688);
-INSERT INTO public.hourly_price VALUES ('2023-10-26 05:00:00+03', 2.471);
-INSERT INTO public.hourly_price VALUES ('2023-10-26 04:00:00+03', 2.308);
-INSERT INTO public.hourly_price VALUES ('2023-10-26 03:00:00+03', 2.296);
-INSERT INTO public.hourly_price VALUES ('2023-10-26 02:00:00+03', 2.38);
-INSERT INTO public.hourly_price VALUES ('2023-10-26 01:00:00+03', 2.521);
-INSERT INTO public.hourly_price VALUES ('2023-10-26 21:00:00+03', 5.803);
-INSERT INTO public.hourly_price VALUES ('2023-10-26 16:00:00+03', 8.778);
-INSERT INTO public.hourly_price VALUES ('2023-10-26 20:00:00+03', 8.493);
-INSERT INTO public.hourly_price VALUES ('2023-10-26 18:00:00+03', 9.839);
-INSERT INTO public.hourly_price VALUES ('2023-10-26 17:00:00+03', 8.849);
-INSERT INTO public.hourly_price VALUES ('2023-10-26 15:00:00+03', 8.413);
-INSERT INTO public.hourly_price VALUES ('2023-10-27 00:00:00+03', 4.243);
-INSERT INTO public.hourly_price VALUES ('2023-10-26 22:00:00+03', 4.887);
-INSERT INTO public.hourly_price VALUES ('2023-10-26 23:00:00+03', 4.674);
-INSERT INTO public.hourly_price VALUES ('2023-10-27 23:00:00+03', 5.714);
-INSERT INTO public.hourly_price VALUES ('2023-10-27 14:00:00+03', 13.194);
-INSERT INTO public.hourly_price VALUES ('2023-10-27 13:00:00+03', 14.706);
-INSERT INTO public.hourly_price VALUES ('2023-10-27 12:00:00+03', 13.456);
-INSERT INTO public.hourly_price VALUES ('2023-10-27 11:00:00+03', 13.449);
-INSERT INTO public.hourly_price VALUES ('2023-10-27 10:00:00+03', 18.348);
-INSERT INTO public.hourly_price VALUES ('2023-10-27 09:00:00+03', 18.55);
-INSERT INTO public.hourly_price VALUES ('2023-10-27 08:00:00+03', 13.161);
-INSERT INTO public.hourly_price VALUES ('2023-10-27 07:00:00+03', 8.836);
-INSERT INTO public.hourly_price VALUES ('2023-10-27 06:00:00+03', 6.1);
-INSERT INTO public.hourly_price VALUES ('2023-10-27 05:00:00+03', 6.159);
-INSERT INTO public.hourly_price VALUES ('2023-10-27 04:00:00+03', 5.86);
-INSERT INTO public.hourly_price VALUES ('2023-10-27 03:00:00+03', 6.029);
-INSERT INTO public.hourly_price VALUES ('2023-10-27 22:00:00+03', 8.506);
-INSERT INTO public.hourly_price VALUES ('2023-10-27 02:00:00+03', 6.165);
-INSERT INTO public.hourly_price VALUES ('2023-10-27 01:00:00+03', 6.31);
-INSERT INTO public.hourly_price VALUES ('2023-10-27 20:00:00+03', 14.879);
-INSERT INTO public.hourly_price VALUES ('2023-10-27 19:00:00+03', 16.792);
-INSERT INTO public.hourly_price VALUES ('2023-10-27 21:00:00+03', 9.156);
-INSERT INTO public.hourly_price VALUES ('2023-10-27 17:00:00+03', 10.995);
-INSERT INTO public.hourly_price VALUES ('2023-10-27 18:00:00+03', 15.109);
-INSERT INTO public.hourly_price VALUES ('2023-10-27 15:00:00+03', 12.204);
-INSERT INTO public.hourly_price VALUES ('2023-10-27 16:00:00+03', 9.908);
-INSERT INTO public.hourly_price VALUES ('2023-10-28 00:00:00+03', 5.447);
-INSERT INTO public.hourly_price VALUES ('2023-11-02 00:00:00+02', 2.102);
-INSERT INTO public.hourly_price VALUES ('2023-11-01 14:00:00+02', 2.355);
-INSERT INTO public.hourly_price VALUES ('2023-11-01 13:00:00+02', 2.398);
-INSERT INTO public.hourly_price VALUES ('2023-11-01 12:00:00+02', 2.407);
-INSERT INTO public.hourly_price VALUES ('2023-11-01 11:00:00+02', 2.376);
-INSERT INTO public.hourly_price VALUES ('2023-11-01 10:00:00+02', 2.355);
-INSERT INTO public.hourly_price VALUES ('2023-11-01 09:00:00+02', 2.332);
-INSERT INTO public.hourly_price VALUES ('2023-11-01 08:00:00+02', 2.129);
-INSERT INTO public.hourly_price VALUES ('2023-11-01 07:00:00+02', 2.008);
-INSERT INTO public.hourly_price VALUES ('2023-11-01 06:00:00+02', 1.87);
-INSERT INTO public.hourly_price VALUES ('2023-11-01 05:00:00+02', 0.218);
-INSERT INTO public.hourly_price VALUES ('2023-11-01 04:00:00+02', 0.001);
-INSERT INTO public.hourly_price VALUES ('2023-11-01 03:00:00+02', 0.001);
-INSERT INTO public.hourly_price VALUES ('2023-11-01 02:00:00+02', 0.083);
-INSERT INTO public.hourly_price VALUES ('2023-11-01 01:00:00+02', 0.275);
-INSERT INTO public.hourly_price VALUES ('2023-11-01 00:00:00+02', 1.231);
-INSERT INTO public.hourly_price VALUES ('2023-10-31 23:00:00+02', 1.653);
-INSERT INTO public.hourly_price VALUES ('2023-10-31 22:00:00+02', 2.196);
-INSERT INTO public.hourly_price VALUES ('2023-10-31 21:00:00+02', 2.451);
-INSERT INTO public.hourly_price VALUES ('2023-10-31 20:00:00+02', 2.747);
-INSERT INTO public.hourly_price VALUES ('2023-10-31 19:00:00+02', 3.099);
-INSERT INTO public.hourly_price VALUES ('2023-10-31 18:00:00+02', 3.331);
-INSERT INTO public.hourly_price VALUES ('2023-10-31 17:00:00+02', 5.064);
-INSERT INTO public.hourly_price VALUES ('2023-10-31 16:00:00+02', 6.064);
-INSERT INTO public.hourly_price VALUES ('2023-10-31 15:00:00+02', 7.497);
-INSERT INTO public.hourly_price VALUES ('2023-10-31 14:00:00+02', 11.672);
-INSERT INTO public.hourly_price VALUES ('2023-10-31 13:00:00+02', 12.195);
-INSERT INTO public.hourly_price VALUES ('2023-10-31 12:00:00+02', 12.25);
-INSERT INTO public.hourly_price VALUES ('2023-10-31 11:00:00+02', 11.175);
-INSERT INTO public.hourly_price VALUES ('2023-10-31 10:00:00+02', 12.075);
-INSERT INTO public.hourly_price VALUES ('2023-10-31 09:00:00+02', 12.979);
-INSERT INTO public.hourly_price VALUES ('2023-10-31 08:00:00+02', 12.903);
-INSERT INTO public.hourly_price VALUES ('2023-10-31 07:00:00+02', 9.91);
-INSERT INTO public.hourly_price VALUES ('2023-10-31 06:00:00+02', 4.267);
-INSERT INTO public.hourly_price VALUES ('2023-10-31 05:00:00+02', 3.715);
-INSERT INTO public.hourly_price VALUES ('2023-10-31 04:00:00+02', 3.783);
-INSERT INTO public.hourly_price VALUES ('2023-10-31 03:00:00+02', 3.705);
-INSERT INTO public.hourly_price VALUES ('2023-10-31 02:00:00+02', 3.672);
-INSERT INTO public.hourly_price VALUES ('2023-10-31 01:00:00+02', 3.667);
-INSERT INTO public.hourly_price VALUES ('2023-11-01 21:00:00+02', 2.427);
-INSERT INTO public.hourly_price VALUES ('2023-11-01 22:00:00+02', 2.486);
-INSERT INTO public.hourly_price VALUES ('2023-11-01 16:00:00+02', 2.292);
-INSERT INTO public.hourly_price VALUES ('2023-11-01 20:00:00+02', 2.442);
-INSERT INTO public.hourly_price VALUES ('2023-11-01 19:00:00+02', 2.464);
-INSERT INTO public.hourly_price VALUES ('2023-11-01 17:00:00+02', 2.372);
-INSERT INTO public.hourly_price VALUES ('2023-11-01 23:00:00+02', 2.37);
-INSERT INTO public.hourly_price VALUES ('2023-11-01 15:00:00+02', 2.314);
-INSERT INTO public.hourly_price VALUES ('2023-11-01 18:00:00+02', 2.779);
 
 
 --
--- TOC entry 3397 (class 0 OID 19540)
+-- TOC entry 3427 (class 0 OID 40967)
 -- Dependencies: 223
 -- Data for Name: month_name_lookup; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.month_name_lookup VALUES (1, 'tammikuu', 'januari', 'January', 'Januar', 'Ocak');
-INSERT INTO public.month_name_lookup VALUES (2, 'helmikuu', 'februari', 'February', 'Februar', 'Şubat');
-INSERT INTO public.month_name_lookup VALUES (3, 'maaliskuu', 'mars', 'March', 'März', 'Mart');
-INSERT INTO public.month_name_lookup VALUES (4, 'huhtikuu', 'april', 'April', 'April', 'Nisan');
-INSERT INTO public.month_name_lookup VALUES (5, 'toukokuu', 'maj', 'May', 'Mai', 'Mayis');
-INSERT INTO public.month_name_lookup VALUES (6, 'kesäkuu', 'juni', 'June', 'Juni', 'Haziran');
-INSERT INTO public.month_name_lookup VALUES (7, 'heinäkuu', 'juli', 'July', 'Juli', 'Temmuz');
-INSERT INTO public.month_name_lookup VALUES (8, 'elokuu', 'augusti', 'August', 'August', 'Ağustos');
-INSERT INTO public.month_name_lookup VALUES (9, 'syyskuu', 'september', 'September', 'September', 'Eylül');
-INSERT INTO public.month_name_lookup VALUES (10, 'lokakuu', 'oktober', 'October', 'Oktober', 'Ekim');
-INSERT INTO public.month_name_lookup VALUES (11, 'marraskuu', 'november', 'November', 'November', 'Kasım');
-INSERT INTO public.month_name_lookup VALUES (12, 'joulukuu', 'december', 'December', 'Dezember', 'Aralık');
+INSERT INTO public.month_name_lookup VALUES (1, 'tammikuu', 'januari', 'January', 'januar', 'ocak');
+INSERT INTO public.month_name_lookup VALUES (2, 'helmikuu', 'februari', 'February', 'februar', 'şubat');
+INSERT INTO public.month_name_lookup VALUES (3, 'maaliskuu', 'mars', 'March', 'märz', 'mart');
+INSERT INTO public.month_name_lookup VALUES (4, 'huhtikuu', 'april', 'April', 'april', 'nisan');
+INSERT INTO public.month_name_lookup VALUES (5, 'toukokuu', 'maj', 'May', 'mai', 'mayis');
+INSERT INTO public.month_name_lookup VALUES (6, 'kesäkuu', 'juni', 'June', 'juni', 'haziran');
+INSERT INTO public.month_name_lookup VALUES (7, 'heinäkuu', 'juli', 'July', 'juli', 'temmuz');
+INSERT INTO public.month_name_lookup VALUES (8, 'elokuu', 'augusti', 'August', 'august', 'ağustos');
+INSERT INTO public.month_name_lookup VALUES (9, 'syyskuu', 'september', 'September', 'september', 'eylül');
+INSERT INTO public.month_name_lookup VALUES (10, 'lokakuu', 'oktober', 'October', 'oktober', 'ekim');
+INSERT INTO public.month_name_lookup VALUES (11, 'marraskuu', 'november', 'November', 'november', 'kasım');
+INSERT INTO public.month_name_lookup VALUES (12, 'joulukuu', 'december', 'December', 'dezemer', 'aralık');
 
 
 --
--- TOC entry 3399 (class 0 OID 36111)
--- Dependencies: 229
+-- TOC entry 3428 (class 0 OID 245871)
+-- Dependencies: 228
 -- Data for Name: observation; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3396 (class 0 OID 19515)
--- Dependencies: 218
+-- TOC entry 3429 (class 0 OID 245885)
+-- Dependencies: 230
+-- Data for Name: temperature_observation; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 3432 (class 0 OID 245900)
+-- Dependencies: 233
+-- Data for Name: weather_station; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 3426 (class 0 OID 32791)
+-- Dependencies: 219
 -- Data for Name: weekday_lookup; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.weekday_lookup VALUES (1, 'maanantai', 'måndag', 'monday', 'Montag', 'Pazartesi');
-INSERT INTO public.weekday_lookup VALUES (2, 'tiistai', 'tisdag', 'tuesday', 'Dienstag', 'Sali');
-INSERT INTO public.weekday_lookup VALUES (3, 'keskiviikko', 'onsdag', 'wednesday', 'Mittwoch', 'Carsamba');
-INSERT INTO public.weekday_lookup VALUES (4, 'torstai', 'torsdag', 'thursday', 'Donnerstag', 'Persemble');
-INSERT INTO public.weekday_lookup VALUES (5, 'perjantai', 'fredag', 'friday', 'Freitag', 'Cuma');
-INSERT INTO public.weekday_lookup VALUES (6, 'lauantai', 'lördag', 'saturday', 'Samstag', 'Cumartesi');
-INSERT INTO public.weekday_lookup VALUES (7, 'sunnuntai', 'söndag', 'sunday', 'Sonntag', 'Pazar');
+INSERT INTO public.weekday_lookup VALUES (1, 'maanantai', 'måndag', 'monday', 'montag', 'pazartesi');
+INSERT INTO public.weekday_lookup VALUES (2, 'tiistai', 'tistag', 'tuesday', 'dienstag', 'sali');
+INSERT INTO public.weekday_lookup VALUES (3, 'keskiviikko', 'onsdag', 'wednesday', 'mittwoch', 'carsamba');
+INSERT INTO public.weekday_lookup VALUES (4, 'torstai', 'torsdag', 'thursday', 'donnerstag', 'persembe');
+INSERT INTO public.weekday_lookup VALUES (5, 'perjantai', 'fredag', 'friday', 'freitag', 'cuma');
+INSERT INTO public.weekday_lookup VALUES (6, 'lauantai', 'lördag', 'saturday', 'samstag', 'cumartesi');
+INSERT INTO public.weekday_lookup VALUES (7, 'sunnuntai', 'söndag', 'sunday', 'sonntag', 'pazar');
 
 
 --
--- TOC entry 3239 (class 2606 OID 36139)
+-- TOC entry 3431 (class 0 OID 245895)
+-- Dependencies: 232
+-- Data for Name: wind_direction_observation; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 3430 (class 0 OID 245890)
+-- Dependencies: 231
+-- Data for Name: wind_speed_observation; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 3269 (class 2606 OID 286858)
 -- Name: forecast forecast_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5079,7 +4942,7 @@ ALTER TABLE ONLY public.forecast
 
 
 --
--- TOC entry 3233 (class 2606 OID 19491)
+-- TOC entry 3253 (class 2606 OID 19491)
 -- Name: hourly_price hourly_price_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5088,7 +4951,7 @@ ALTER TABLE ONLY public.hourly_price
 
 
 --
--- TOC entry 3237 (class 2606 OID 19544)
+-- TOC entry 3257 (class 2606 OID 40971)
 -- Name: month_name_lookup month_name_lookup_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5097,16 +4960,34 @@ ALTER TABLE ONLY public.month_name_lookup
 
 
 --
--- TOC entry 3241 (class 2606 OID 36145)
--- Name: observation observation_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 3259 (class 2606 OID 245875)
+-- Name: observation observation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.observation
-    ADD CONSTRAINT observation_pk PRIMARY KEY ("timestamp", place);
+    ADD CONSTRAINT observation_pkey PRIMARY KEY ("timestamp", place);
 
 
 --
--- TOC entry 3235 (class 2606 OID 19519)
+-- TOC entry 3261 (class 2606 OID 245889)
+-- Name: temperature_observation temperature_observation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.temperature_observation
+    ADD CONSTRAINT temperature_observation_pkey PRIMARY KEY ("timestamp");
+
+
+--
+-- TOC entry 3267 (class 2606 OID 245906)
+-- Name: weather_station weather_station_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.weather_station
+    ADD CONSTRAINT weather_station_pkey PRIMARY KEY (place);
+
+
+--
+-- TOC entry 3255 (class 2606 OID 32795)
 -- Name: weekday_lookup weekday_lookup_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5114,8 +4995,36 @@ ALTER TABLE ONLY public.weekday_lookup
     ADD CONSTRAINT weekday_lookup_pk PRIMARY KEY (weekday_number);
 
 
--- Completed on 2023-11-14 10:25:29
+--
+-- TOC entry 3265 (class 2606 OID 245899)
+-- Name: wind_direction_observation wind_direction_observation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wind_direction_observation
+    ADD CONSTRAINT wind_direction_observation_pkey PRIMARY KEY ("timestamp");
+
+
+--
+-- TOC entry 3263 (class 2606 OID 245894)
+-- Name: wind_speed_observation wind_speed_observation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wind_speed_observation
+    ADD CONSTRAINT wind_speed_observation_pkey PRIMARY KEY ("timestamp");
+
+
+--
+-- TOC entry 3270 (class 2606 OID 245907)
+-- Name: temperature_observation weather_station_temperature_observation_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.temperature_observation
+    ADD CONSTRAINT weather_station_temperature_observation_fk FOREIGN KEY (place) REFERENCES public.weather_station(place) NOT VALID;
+
+
+-- Completed on 2023-12-14 11:28:48
 
 --
 -- PostgreSQL database dump complete
 --
+
