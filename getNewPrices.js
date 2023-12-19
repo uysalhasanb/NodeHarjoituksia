@@ -1,18 +1,37 @@
-// FETCH ELECTRICITY PRICE DATA FROM PORSSISAHKO.NET
-// =================================================
+// A MODULE FOR FETCHING FMI OBSERVATIONS AND FORECASTS
+// ====================================================
 
-// Set the URL for API endpoint: latest prices at 14.00 EET or 15.00 at Finnish summertime
-const LATEST_PRICES_ENDPOINT = 'https://api.porssisahko.net/v1/latest-prices.json';
+// LIBRARIES AND MODULES
+// ---------------------
 
-/* Create a promise for reading data from the API in the background
- and return it as json when ready */
-async function fetchLatestPriceData() {
-    const response = await fetch(LATEST_PRICES_ENDPOINT);
-    const json = await response.json()
-    return json;
+// FUNCTIONS TO GET DATA FROM FMI
+// ------------------------------
+
+// TODO: Create functions for skeletons
+/** 
+* Fetches FMI observation data from FMI WFS API
+* @summary Get weather observations from a given place
+* @param {str} apicall - An URL for the WFS service and predefined query
+* @param {str} place - Name of the monitoring station
+* @param {str} parameters - Value of interest or comma separated list of values
+* @return {str} Results in GML (XML) astring
+*/
+
+const getObservations = (apicall, place, parameters) => {
+    let results = ''
+    return results
 }
 
-// Export fetch function to be imported into other programs
-module.exports = {
-    fetchLatestPriceData
+/** 
+* Fetches FMI observation data from FMI WFS API
+* @summary Get weather observations from a given place
+* @param {str} apicall - An URL for the WFS service and predefined query
+* @param {str} place - Name of the monitoring station
+* @param {str} parameters - Value of interest or comma separated list of values
+* @return {str} Results in GML (XML) astring
+*/
+
+const getForecasts = (apicall, place, parameters) => {
+    let results = ''
+    return results
 }

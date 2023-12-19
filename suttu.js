@@ -7,7 +7,7 @@ const { varianceTransformDependencies } = require("mathjs")
 # 
 @ 
 & 
-variable
+varialble
 constant 
 list 
 array 
