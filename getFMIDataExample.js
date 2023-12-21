@@ -51,8 +51,8 @@ class WeatherObservationTimeValuePair {
 
         // Creates an URL combining predefined query and place and parametercode like t2m (temperature)
         this.url =
-            'https://opendata.fmi.fi/wfs/fin?service=WFS&version=2.0.0&request=GetFeature&storedquery_id=fmi::observations::weather::timevaluepair&place=' +
-            place +
+            'https://opendata.fmi.fi/wfs/fin?service=WFS&version=2.0.0&request=GetFeature&storedquery_id=fmi::observations::weather::timevaluepair&place=' 
+            + place +
             '&parameters=' +
             parameterCode;
 
@@ -353,9 +353,10 @@ console.log(observationtimeValuePair.xmlTemplate);
 //observationtimeValuePair.putTimeValuPairsToDb()
 
 // Test reading forecast data and storig results to database: Turku temperatustes
-const forecastTimeValuePair = new WeatherForecastTimeValuePair('Turku', 'Temperature', 'temperature')
-console.log(forecastTimeValuePair.url);
-console.log(forecastTimeValuePair.xmlTemplate)
+const forecast = new WeatherForecastTimeValuePair('Turku', 'Temperature', 'temperature')
+
+// forecast.getFMIDataAsXML()
+setTimeout(forecast.convertXml2array(), 3000)
 
 // Show fetched data as XML output
 // forecastTimeValuePair.getFMIDataAsXML()
