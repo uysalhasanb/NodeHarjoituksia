@@ -339,7 +339,7 @@ class WindVector {
     }
 }
 // Test reading observation data and storig results to database: Turku temperatures
-const observationtimeValuePair = new WeatherObservationTimeValuePair('Turku','ws_10min', 'windspeed');
+const observationtimeValuePair = new WeatherObservationTimeValuePair('Turku','ws_10min', 'Temperature');
 
 // Show url to fetch from
 console.log(observationtimeValuePair.url);
@@ -353,14 +353,13 @@ observationtimeValuePair.getFMIDataAsXML();
 //observationtimeValuePair.putTimeValuPairsToDb()
 
 // Test reading forecast data and storig results to database: Turku temperatustes
-// const forecast = new WeatherForecastTimeValuePair('Turku', 'Temperature', 'temperature')
-
-// forecast.getFMIDataAsXML()
-// setTimeout(forecast.convertXml2array(), 3000)
+// const forecastTimeValuePair = new WeatherForecastTimeValuePair('Turku', 'Temperature', 'temperature')
+// console.log(forecastTimeValuePair.url)
+// console.log(forecastTimeValuePair.xmlTemplate)
 
 // Show fetched data as XML output
 // forecastTimeValuePair.getFMIDataAsXML()
-//forecastTimeValuePair.putTimeValuPairsToDb()
+// forecastTimeValuePair.putTimeValuPairsToDb()
 
 //let windVector = new WindVector(3, -4)
 //console.log(windVector.windParameters())
