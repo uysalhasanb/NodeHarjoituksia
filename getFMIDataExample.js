@@ -347,16 +347,16 @@ console.log(observationtimeValuePair.url);
 // Show parsing template to see resultset column names
 console.log(observationtimeValuePair.xmlTemplate);
 // Show fetched data as XML output
-// observationTimeValuePair.getFMIDataAsXML();
+observationtimeValuePair.getFMIDataAsXML();
 
 // Insert observation data into the database
 //observationtimeValuePair.putTimeValuPairsToDb()
 
 // Test reading forecast data and storig results to database: Turku temperatustes
-const forecast = new WeatherForecastTimeValuePair('Turku', 'Temperature', 'temperature')
+// const forecast = new WeatherForecastTimeValuePair('Turku', 'Temperature', 'temperature')
 
 // forecast.getFMIDataAsXML()
-setTimeout(forecast.convertXml2array(), 3000)
+// setTimeout(forecast.convertXml2array(), 3000)
 
 // Show fetched data as XML output
 // forecastTimeValuePair.getFMIDataAsXML()

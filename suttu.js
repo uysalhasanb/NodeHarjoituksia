@@ -1,14 +1,3 @@
-const { varianceTransformDependencies } = require("mathjs")
-
-
-{}
-[]
-()
-# 
-@ 
-& 
-varialble
-constant 
-list 
-array 
-vector 
+const fs = require('fs');
+let xml = fs.readFileSync('./windSpeed.xml')
+console.log(xml)
